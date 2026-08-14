@@ -8,6 +8,7 @@ import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
 import * as Speechify from "../../../index.js";
+import { ConsentChallengesClient } from "../resources/consentChallenges/client/Client.js";
 
 export declare namespace VoicesClient {
     export type Options = BaseClientOptions;
@@ -21,18 +22,25 @@ export declare namespace VoicesClient {
  */
 export class VoicesClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<VoicesClient.Options>;
+    protected _consentChallenges: ConsentChallengesClient | undefined;
 
     constructor(options: VoicesClient.Options = {}) {
         this._options = normalizeClientOptionsWithAuth(options);
     }
 
+    public get consentChallenges(): ConsentChallengesClient {
+        return (this._consentChallenges ??= new ConsentChallengesClient(this._options));
+    }
+
     /**
      * Lists the voices available to the caller - the shared voice
-     * catalog plus the workspace's personal cloned voices. By default
+     * catalog plus the workspace's cloned voices, whichever member or
+     * service-account key created them. By default
      * the full catalogue is returned in one response. Pagination is
      * opt-in: pass `limit` (and then `cursor` from the previous
      * response) to page through the list while `has_more` is true. Max
-     * page size is 200.
+     * page size is 200. Narrow the list with the `type` and `locale`
+     * filters (applied before pagination, so pages stay full).
      *
      * @param {Speechify.ListVoicesRequest} request
      * @param {VoicesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -44,7 +52,10 @@ export class VoicesClient {
      * @throws {@link Speechify.InternalServerError}
      *
      * @example
-     *     await client.voices.list()
+     *     await client.voices.list({
+     *         locale: "en",
+     *         model: "simba-3.2"
+     *     })
      */
     public async list(
         request: Speechify.ListVoicesRequest = {},
@@ -54,17 +65,21 @@ export class VoicesClient {
             async (
                 request: Speechify.ListVoicesRequest,
             ): Promise<core.WithRawResponse<Speechify.ListVoicesResponse>> => {
-                const { cursor, limit } = request;
+                const { cursor, limit, type: type_, locale, gender, model } = request;
                 const _queryParams: Record<string, unknown> = {
                     cursor,
                     limit,
+                    type: type_ != null ? type_ : undefined,
+                    locale,
+                    gender: gender != null ? gender : undefined,
+                    model,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
                     this._options?.headers,
                     mergeOnlyDefinedHeaders({
-                        "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-07-07",
+                        "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
                     }),
                     requestOptions?.headers,
                 );
@@ -141,7 +156,13 @@ export class VoicesClient {
     }
 
     /**
-     * Create a personal (cloned) voice for the user
+     * Create a cloned voice for the workspace from a 10-30 second audio sample, with verified consent from the speaker.
+     *
+     * Cloning requires proof that the speaker agreed to it. Create a consent challenge with `POST /v1/voices/consent-challenges`, show the returned `phrase` to the speaker, record them reading it aloud, and send that recording here as `consent_recording` together with the challenge's `consent_challenge_id`. Speechify transcribes the recording, checks it against the phrase it issued, and keeps it as the consent record for the voice. A challenge is single use and short-lived, so record and submit in one sitting.
+     *
+     * The clone belongs to the workspace rather than the member who created it, and access follows the caller's workspace role and API-key scopes exactly as for any other voice: voices scopes to list it, audio scopes to synthesize with it, and the content-management permission plus a write scope on the key to delete it. Cloned voices are usable self-serve on `simba-3.0`, `simba-english` and `simba-multilingual`. `simba-3.2` also serves cloned voices, currently as a limited release enabled per workspace; contact Speechify to have it enabled for yours.
+     *
+     * Callers pinned before `Speechify-Version: 2026-09-13` use the previous flow instead: no challenge, and a `consent` form field carrying the speaker's name and email as a JSON string. That flow is deprecated and will be removed after a sunset window announced in the changelog.
      *
      * @param {Speechify.CreateVoicesRequest} request
      * @param {VoicesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -151,6 +172,7 @@ export class VoicesClient {
      * @throws {@link Speechify.PaymentRequiredError}
      * @throws {@link Speechify.ForbiddenError}
      * @throws {@link Speechify.ConflictError}
+     * @throws {@link Speechify.ContentTooLargeError}
      * @throws {@link Speechify.UnprocessableEntityError}
      * @throws {@link Speechify.TooManyRequestsError}
      * @throws {@link Speechify.InternalServerError}
@@ -161,10 +183,11 @@ export class VoicesClient {
      *     import { createReadStream } from "fs";
      *     await client.voices.create({
      *         sample: fs.createReadStream("/path/to/your/file"),
+     *         consent_recording: fs.createReadStream("/path/to/your/file"),
      *         "Idempotency-Key": "a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
      *         name: "name",
      *         gender: "male",
-     *         consent: "consent"
+     *         consent_challenge_id: "consent_challenge_id"
      *     })
      */
     public create(
@@ -190,7 +213,8 @@ export class VoicesClient {
             await _body.appendFile("avatar", request.avatar);
         }
 
-        _body.append("consent", request.consent);
+        _body.append("consent_challenge_id", request.consent_challenge_id);
+        await _body.appendFile("consent_recording", request.consent_recording);
         const _maybeEncodedRequest = await _body.getRequest();
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -198,7 +222,7 @@ export class VoicesClient {
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "Idempotency-Key": request["Idempotency-Key"],
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-07-07",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
                 ..._maybeEncodedRequest.headers,
             }),
             requestOptions?.headers,
@@ -241,6 +265,11 @@ export class VoicesClient {
                     throw new Speechify.ForbiddenError(_response.error.body as Speechify.Error_, _response.rawResponse);
                 case 409:
                     throw new Speechify.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new Speechify.ContentTooLargeError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new Speechify.UnprocessableEntityError(
                         _response.error.body as Speechify.Error_,
@@ -280,9 +309,9 @@ export class VoicesClient {
 
     /**
      * Fetch a single voice by id - a shared catalogue voice or one of
-     * the caller's own personal (cloned) voices. A personal voice that
-     * belongs to another workspace returns 404, identical to an
-     * unknown id, so voice inventory is never enumerable across tenants.
+     * the workspace's cloned voices. A cloned voice that belongs to
+     * another workspace returns 404, identical to an unknown id, so
+     * voice inventory is never enumerable across tenants.
      *
      * @param {Speechify.GetVoicesRequest} request
      * @param {VoicesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -317,7 +346,7 @@ export class VoicesClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-07-07",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
             }),
             requestOptions?.headers,
         );
@@ -382,7 +411,9 @@ export class VoicesClient {
     }
 
     /**
-     * Delete a personal (cloned) voice
+     * Delete one of the workspace's cloned voices. Requires the
+     * `content.manage` permission (owner, admin, or member); a
+     * service-account key is authorized by its scopes instead.
      *
      * @param {Speechify.DeleteVoicesRequest} request
      * @param {VoicesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -418,7 +449,7 @@ export class VoicesClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-07-07",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
             }),
             requestOptions?.headers,
         );
@@ -513,7 +544,7 @@ export class VoicesClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-07-07",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
             }),
             requestOptions?.headers,
         );

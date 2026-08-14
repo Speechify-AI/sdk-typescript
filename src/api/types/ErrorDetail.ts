@@ -29,4 +29,11 @@ export interface ErrorDetail {
      * it - the `code` + `message` contract is unchanged.
      */
     details?: Record<string, unknown> | undefined;
+    /**
+     * Link to the documentation that resolves this class of
+     * error, when a stable page exists. Rate and concurrency
+     * 429s link the API limits reference, which lists each
+     * plan's limits and how to raise them.
+     */
+    docs_url?: string | undefined;
 }

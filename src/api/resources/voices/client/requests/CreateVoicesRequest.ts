@@ -6,10 +6,11 @@ import type * as core from "../../../../../core/index.js";
  * @example
  *     {
  *         sample: fs.createReadStream("/path/to/your/file"),
+ *         consent_recording: fs.createReadStream("/path/to/your/file"),
  *         "Idempotency-Key": "a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
  *         name: "name",
  *         gender: "male",
- *         consent: "consent"
+ *         consent_challenge_id: "consent_challenge_id"
  *     }
  */
 export interface CreateVoicesRequest {
@@ -33,16 +34,25 @@ export interface CreateVoicesRequest {
      * not_specified GenderNotSpecified
      */
     gender: CreateVoicesRequest.Gender;
-    /** Audio sample file */
+    /** Audio sample of the voice to clone, 10-30 seconds of clean speech. */
     sample: core.file.Uploadable;
     /** Avatar image file */
     avatar?: core.file.Uploadable | undefined;
     /**
-     * A **string** representing the user consent information in JSON format
-     * This should include the fullName and email of the consenting individual.
-     * For example, `{"fullName": "John Doe", "email": "john@example.com"}`
+     * The `id` of the consent challenge this create consumes, from
+     * `POST /v1/voices/consent-challenges`. Single use: once a
+     * create has consumed it, whether or not that create
+     * succeeded, it cannot be used again.
      */
-    consent: string;
+    consent_challenge_id: string;
+    /**
+     * Recording of the speaker reading the challenge's `phrase`
+     * aloud. This is the consent record for the voice, not a
+     * second voice sample: it must be the same person as in
+     * `sample`, and it is retained as evidence. 5-30 seconds, at
+     * most 25 MB, in any common audio container.
+     */
+    consent_recording: core.file.Uploadable;
 }
 
 export namespace CreateVoicesRequest {

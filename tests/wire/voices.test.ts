@@ -41,7 +41,10 @@ describe("VoicesClient", () => {
             .build();
 
         const expected = rawResponseBody;
-        const page = await client.voices.list();
+        const page = await client.voices.list({
+            locale: "en",
+            model: "simba-3.2",
+        });
 
         expect(expected.voices).toEqual(page.data);
         expect(page.hasNextPage()).toBe(true);

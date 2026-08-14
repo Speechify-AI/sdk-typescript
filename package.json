@@ -1,10 +1,10 @@
 {
     "name": "@speechify/api",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "private": false,
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/SpeechifyInc/speechify-api-sdk-typescript.git"
+        "url": "git+https://github.com/speechify-ai/sdk-typescript.git"
     },
     "type": "commonjs",
     "main": "./dist/cjs/index.js",
@@ -33,6 +33,17 @@
             },
             "default": "./dist/cjs/api/resources/audio/exports.js"
         },
+        "./models": {
+            "import": {
+                "types": "./dist/esm/api/resources/models/exports.d.mts",
+                "default": "./dist/esm/api/resources/models/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/models/exports.d.ts",
+                "default": "./dist/cjs/api/resources/models/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/models/exports.js"
+        },
         "./voices": {
             "import": {
                 "types": "./dist/esm/api/resources/voices/exports.d.mts",
@@ -43,6 +54,17 @@
                 "default": "./dist/cjs/api/resources/voices/exports.js"
             },
             "default": "./dist/cjs/api/resources/voices/exports.js"
+        },
+        "./voices/consentChallenges": {
+            "import": {
+                "types": "./dist/esm/api/resources/voices/resources/consentChallenges/exports.d.mts",
+                "default": "./dist/esm/api/resources/voices/resources/consentChallenges/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/voices/resources/consentChallenges/exports.d.ts",
+                "default": "./dist/cjs/api/resources/voices/resources/consentChallenges/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/voices/resources/consentChallenges/exports.js"
         },
         "./package.json": "./package.json"
     },
