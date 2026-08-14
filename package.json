@@ -4,7 +4,7 @@
     "private": false,
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/speechify-ai/sdk-typescript.git"
+        "url": "git+https://github.com/Speechify-AI/sdk-typescript.git"
     },
     "type": "commonjs",
     "main": "./dist/cjs/index.js",

@@ -8,8 +8,9 @@
       "package-name": "@speechify/api",
       "extra-files": [
         {
-          "type": "generic",
-          "path": "src/version.ts"
+          "type": "json",
+          "path": ".fern/metadata.json",
+          "jsonpath": "$.sdkVersion"
         }
       ]
     }
