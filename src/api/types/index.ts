@@ -16,4 +16,8 @@ export * from "./Model.js";
 export * from "./ModelsResponse.js";
 export * from "./NestedChunk.js";
 export * from "./PaginationMeta.js";
+export * from "./SpeechChunkEvent.js";
+export * from "./SpeechDoneEvent.js";
+export * from "./SpeechErrorEvent.js";
 export * from "./SpeechMarks.js";
+export * from "./SpeechStreamEvent.js";

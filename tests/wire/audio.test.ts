@@ -318,7 +318,8 @@ describe("AudioClient", () => {
             model: "simba-3.2",
             voice_id: "geffen_32",
         };
-        const rawResponseBody = 'event: \ndata: "string"\n\n';
+        const rawResponseBody =
+            'event: \ndata: {"audio":"SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYxLjcuMTAw...","speech_marks":[{"end":5,"end_time":320,"start":0,"start_time":0,"type":"word","value":"Hello"}],"type":"speech.chunk"}\n\n';
 
         server
             .mockEndpoint()
@@ -340,7 +341,22 @@ describe("AudioClient", () => {
         for await (const event of response) {
             events.push(event);
         }
-        expect(events).toEqual(["string"]);
+        expect(events).toEqual([
+            {
+                type: "speech.chunk",
+                audio: "SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYxLjcuMTAw...",
+                speech_marks: [
+                    {
+                        end: 5,
+                        end_time: 320,
+                        start: 0,
+                        start_time: 0,
+                        type: "word",
+                        value: "Hello",
+                    },
+                ],
+            },
+        ]);
     });
 
     test("streamWithTimestamps (2)", async () => {

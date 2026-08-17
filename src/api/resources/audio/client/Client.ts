@@ -287,14 +287,14 @@ export class AudioClient {
     public streamWithTimestamps(
         request: Speechify.StreamWithTimestampsAudioRequest,
         requestOptions?: AudioClient.RequestOptions,
-    ): core.HttpResponsePromise<core.Stream<string>> {
+    ): core.HttpResponsePromise<core.Stream<Speechify.SpeechStreamEvent>> {
         return core.HttpResponsePromise.fromPromise(this.__streamWithTimestamps(request, requestOptions));
     }
 
     private async __streamWithTimestamps(
         request: Speechify.StreamWithTimestampsAudioRequest,
         requestOptions?: AudioClient.RequestOptions,
-    ): Promise<core.WithRawResponse<core.Stream<string>>> {
+    ): Promise<core.WithRawResponse<core.Stream<Speechify.SpeechStreamEvent>>> {
         const { Accept: accept, body: _body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(

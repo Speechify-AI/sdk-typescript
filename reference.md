@@ -146,7 +146,7 @@ await client.audio.stream({
 </dl>
 </details>
 
-<details><summary><code>client.audio.<a href="/src/api/resources/audio/client/Client.ts">streamWithTimestamps</a>({ ...params }) -> core.Stream&lt;string&gt;</code></summary>
+<details><summary><code>client.audio.<a href="/src/api/resources/audio/client/Client.ts">streamWithTimestamps</a>({ ...params }) -> core.Stream&lt;Speechify.SpeechStreamEvent&gt;</code></summary>
 <dl>
 <dd>
 
