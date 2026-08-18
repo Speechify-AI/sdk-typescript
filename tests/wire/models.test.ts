@@ -18,7 +18,7 @@ describe("ModelsClient", () => {
             models: [
                 {
                     id: "simba-english",
-                    name: "Simba English",
+                    name: "Simba 1.6 English",
                     default: false,
                     recommended: false,
                     deprecated: true,
@@ -30,7 +30,7 @@ describe("ModelsClient", () => {
                 },
                 {
                     id: "simba-multilingual",
-                    name: "Simba Multilingual",
+                    name: "Simba 1.6 Multilingual",
                     default: false,
                     recommended: false,
                     deprecated: true,
