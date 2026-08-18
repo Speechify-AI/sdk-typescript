@@ -122,9 +122,44 @@ const response = await client.audio.streamWithTimestamps({
         voice_id: "geffen_32"
     }
 });
+
+const audioChunks: Buffer[] = [];
+
 for await (const item of response) {
-    console.log(item);
+    switch (item.type) {
+        case "speech.chunk":
+            // `audio` is Base64 and the SDK does not decode it for you. It is
+            // absent on a marks-only chunk, which the last chunk often is.
+            if (item.audio != null) {
+                audioChunks.push(Buffer.from(item.audio, "base64"));
+            }
+            // Mark times are absolute ms from the start of the synthesis, so
+            // they apply to the concatenated audio, not to this chunk.
+            for (const mark of item.speech_marks ?? []) {
+                console.log(mark.start_time, mark.value);
+            }
+            break;
+
+        case "speech.error":
+            // A failure after the stream has opened arrives as an event, NOT as
+            // a thrown error: the 200 status is already committed. The SDK does
+            // not raise it for you, so handle it explicitly — otherwise the loop
+            // ends normally and you treat truncated audio as a success.
+            throw new Error(`${item.error.code}: ${item.error.message}`);
+
+        case "speech.done":
+            // Terminal event. There is no `[DONE]` sentinel.
+            console.log("billable characters:", item.billable_characters_count);
+            console.log("audio duration (ms):", item.audio_duration_ms);
+            break;
+
+        default:
+            // Ignore unrecognized event types so new ones cannot break you.
+            break;
+    }
 }
+
+const audio = Buffer.concat(audioChunks);
 ```
 
 ## File Uploads

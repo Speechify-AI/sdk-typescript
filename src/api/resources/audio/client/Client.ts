@@ -334,6 +334,7 @@ export class AudioClient {
                     signal: requestOptions?.abortSignal,
                     eventShape: {
                         type: "sse",
+                        eventDiscriminator: "type",
                     },
                 }),
                 rawResponse: _response.rawResponse,

@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { Stream } from "../../../src/core/stream/Stream";
 
 describe("Stream", () => {
@@ -366,6 +367,88 @@ describe("Stream", () => {
         });
     });
 
+    // The shape POST /v1/audio/stream/with-timestamps actually sends, verified
+    // against the live API: a populated `event:` name, a payload that already
+    // carries `type`, and a blank line after every frame.
+    describe("streamWithTimestamps SSE shape", () => {
+        const speechEventShape = { type: "sse", eventDiscriminator: "type" } as const;
+
+        async function collect(chunks: string[]): Promise<unknown[]> {
+            const stream = new Stream({
+                stream: createReadableStream(chunks),
+                parse: async (val: unknown) => val,
+                eventShape: speechEventShape,
+            });
+
+            const messages: unknown[] = [];
+            for await (const message of stream) {
+                messages.push(message);
+            }
+            return messages;
+        }
+
+        it("should keep the payload's own type when the event name agrees", async () => {
+            const messages = await collect(['event: speech.chunk\ndata: {"type":"speech.chunk","audio":"QUJD"}\n\n']);
+
+            expect(messages).toEqual([{ type: "speech.chunk", audio: "QUJD" }]);
+        });
+
+        it("should keep the payload's own type when the event name is empty", async () => {
+            // The generated wire fixture still shows an empty `event:` name, so
+            // the discriminator must never overwrite an already-parsed type.
+            const messages = await collect(['event: \ndata: {"type":"speech.chunk","audio":"QUJD"}\n\n']);
+
+            expect(messages).toEqual([{ type: "speech.chunk", audio: "QUJD" }]);
+        });
+
+        it("should concatenate a data field split across multiple lines", async () => {
+            const messages = await collect([
+                'event: speech.chunk\ndata: {"type":"speech.chunk",\ndata: "audio":"QUJD"}\n\n',
+            ]);
+
+            expect(messages).toEqual([{ type: "speech.chunk", audio: "QUJD" }]);
+        });
+
+        it("should yield a final event that has no trailing blank line", async () => {
+            // speech.done carries billable_characters_count. Dropping the last
+            // event because the stream ended without a terminator loses it.
+            const messages = await collect([
+                'event: speech.done\ndata: {"type":"speech.done","billable_characters_count":31,"audio_duration_ms":1710}\n',
+            ]);
+
+            expect(messages).toEqual([{ type: "speech.done", billable_characters_count: 31, audio_duration_ms: 1710 }]);
+        });
+
+        it("should not treat a 'data:' substring inside a payload value as a field", async () => {
+            const messages = await collect([
+                'event: speech.chunk\ndata: {"type":"speech.chunk","note":"data: not a field"}\n\n',
+            ]);
+
+            expect(messages).toEqual([{ type: "speech.chunk", note: "data: not a field" }]);
+        });
+
+        it("should ignore a non-data line containing a 'data:' substring", async () => {
+            const messages = await collect([
+                'event: speech.chunk\n: keepalive data: ping\ndata: {"type":"speech.chunk","audio":"QUJD"}\n\n',
+            ]);
+
+            expect(messages).toEqual([{ type: "speech.chunk", audio: "QUJD" }]);
+        });
+
+        it("should read a chunk/done sequence across chunk boundaries", async () => {
+            const messages = await collect([
+                'event: speech.chunk\ndata: {"type":"speech.chunk","audio":"QU',
+                'JD"}\n\n\nevent: speech.done\ndata: {"type":"speech.done",',
+                '"billable_characters_count":31,"audio_duration_ms":1710}\n\n\n',
+            ]);
+
+            expect(messages).toEqual([
+                { type: "speech.chunk", audio: "QUJD" },
+                { type: "speech.done", billable_characters_count: 31, audio_duration_ms: 1710 },
+            ]);
+        });
+    });
+
     describe("encoding and decoding", () => {
         it("should decode UTF-8 text using TextDecoder", async () => {
             const encoder = new TextEncoder();
@@ -447,7 +530,9 @@ describe("Stream", () => {
     });
 
     describe("abort signal", () => {
-        it("should handle abort signal", async () => {
+        // No `break` in these loops on purpose: the only thing that can end
+        // iteration is the abort itself, so removing the abort fails the test.
+        it("should raise an AbortError and stop yielding when aborted mid-stream", async () => {
             const controller = new AbortController();
             const mockStream = createReadableStream(['{"value": 1}\n{"value": 2}\n{"value": 3}\n']);
             const stream = new Stream({
@@ -458,17 +543,90 @@ describe("Stream", () => {
             });
 
             const messages: unknown[] = [];
-            let count = 0;
-            for await (const message of stream) {
-                messages.push(message);
-                count++;
-                if (count === 2) {
-                    controller.abort();
-                    break;
+            let caught: unknown;
+            try {
+                for await (const message of stream) {
+                    messages.push(message);
+                    if (messages.length === 2) {
+                        controller.abort();
+                    }
                 }
+            } catch (error) {
+                caught = error;
             }
 
-            expect(messages.length).toBe(2);
+            expect(caught).toBeInstanceOf(Error);
+            expect((caught as Error).name).toBe("AbortError");
+            expect(messages).toEqual([{ value: 1 }, { value: 2 }]);
+        });
+
+        it("should yield nothing when the signal is already aborted", async () => {
+            const controller = new AbortController();
+            controller.abort();
+            const mockStream = createReadableStream(['{"value": 1}\n{"value": 2}\n']);
+            const stream = new Stream({
+                stream: mockStream,
+                parse: async (val: unknown) => val as { value: number },
+                eventShape: { type: "json", messageTerminator: "\n" },
+                signal: controller.signal,
+            });
+
+            const messages: unknown[] = [];
+            let caught: unknown;
+            try {
+                for await (const message of stream) {
+                    messages.push(message);
+                }
+            } catch (error) {
+                caught = error;
+            }
+
+            expect((caught as Error).name).toBe("AbortError");
+            expect(messages).toEqual([]);
+        });
+
+        it("should propagate the caller's own abort reason", async () => {
+            const controller = new AbortController();
+            const reason = new Error("caller changed their mind");
+            const mockStream = createReadableStream(['{"value": 1}\n{"value": 2}\n']);
+            const stream = new Stream({
+                stream: mockStream,
+                parse: async (val: unknown) => val as { value: number },
+                eventShape: { type: "json", messageTerminator: "\n" },
+                signal: controller.signal,
+            });
+
+            const messages: unknown[] = [];
+            let caught: unknown;
+            try {
+                for await (const message of stream) {
+                    messages.push(message);
+                    controller.abort(reason);
+                }
+            } catch (error) {
+                caught = error;
+            }
+
+            expect(caught).toBe(reason);
+            expect(messages).toEqual([{ value: 1 }]);
+        });
+
+        it("should not subscribe to the signal, so a reused signal retains no streams", () => {
+            const controller = new AbortController();
+            const addEventListener = vi.spyOn(controller.signal, "addEventListener");
+
+            const streams = [1, 2, 3].map(
+                () =>
+                    new Stream({
+                        stream: createReadableStream([]),
+                        parse: async (val: unknown) => val,
+                        eventShape: { type: "json", messageTerminator: "\n" },
+                        signal: controller.signal,
+                    }),
+            );
+
+            expect(streams).toHaveLength(3);
+            expect(addEventListener).not.toHaveBeenCalled();
         });
     });
 

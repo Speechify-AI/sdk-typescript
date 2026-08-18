@@ -46,7 +46,7 @@ export class Stream<T> implements AsyncIterable<T> {
     private messageTerminator: string;
     private streamTerminator: string | undefined;
     private eventDiscriminator: string | undefined;
-    private controller: AbortController = new AbortController();
+    private signal: AbortSignal | undefined;
     private decoder: TextDecoder | undefined;
 
     constructor({ stream, parse, eventShape, signal }: Stream.Args & { parse: (val: unknown) => Promise<T> }) {
@@ -60,7 +60,10 @@ export class Stream<T> implements AsyncIterable<T> {
         } else {
             this.messageTerminator = eventShape.messageTerminator;
         }
-        signal?.addEventListener("abort", () => this.controller.abort());
+        // Held rather than subscribed to. An "abort" listener closes over `this`,
+        // so a long-lived reused signal would retain every Stream built from it;
+        // the read loop polls `aborted` instead and nothing outlives this object.
+        this.signal = signal;
 
         // Initialize shared TextDecoder
         if (typeof TextDecoder !== "undefined") {
@@ -179,8 +182,28 @@ export class Stream<T> implements AsyncIterable<T> {
         return { [this.eventDiscriminator]: eventType, ...obj };
     }
 
+    /**
+     * Halts iteration as soon as the caller's signal is aborted, so an aborted
+     * stream raises an AbortError instead of ending as a silent, truncated
+     * success. Rethrows the caller's own abort reason when one was given.
+     */
+    private throwIfAborted(): void {
+        if (this.signal?.aborted !== true) {
+            return;
+        }
+        const abortReason: unknown = this.signal.reason;
+        if (abortReason != null) {
+            throw abortReason;
+        }
+        const abortError = new Error("The stream was aborted");
+        abortError.name = "AbortError";
+        throw abortError;
+    }
+
     async *[Symbol.asyncIterator](): AsyncIterator<T, void, unknown> {
+        this.throwIfAborted();
         for await (const message of this.iterMessages()) {
+            this.throwIfAborted();
             yield message;
         }
     }

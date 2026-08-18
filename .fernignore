@@ -33,3 +33,52 @@ AGENTS.md
 
 # ignore context7 config file
 context7.json
+
+# SSE streaming fixes for POST /v1/audio/stream/with-timestamps. Each entry
+# below records what has to land upstream before it can be deleted again.
+
+# Passes `eventDiscriminator: "type"` to core.Stream, which routes the response
+# through iterSseEvents() instead of the defective iterDataMessages(). The live
+# API sends a populated `event: speech.chunk` name, so the discriminator is
+# correct. Without it, regen drops back to `{ type: "sse" }` and silently loses
+# multi-line `data:` concatenation, the trailing flush that carries speech.done
+# and its billable_characters_count, and CRLF handling.
+# Remove once SpeechifyInc/speechify-api declares the SSE event discriminator on
+# the with-timestamps endpoint (response-stream `format: sse` plus
+# `event-discriminator: type`) so the generator emits it.
+# COST: this freezes the whole audio resource client. Future API changes to any
+# audio endpoint will not land on regen while this entry is listed.
+src/api/resources/audio/client/Client.ts
+
+# Fixes abort handling in core.Stream. The generated version assigns a private
+# AbortController that nothing ever reads, and registers an abort listener that
+# closes over `this`, so the handler is a no-op and a reused AbortSignal retains
+# every Stream built from it. The shielded version holds the signal and polls
+# `aborted`, raising AbortError rather than ending iteration as a silent
+# truncated success.
+# This is generator template code, not API surface, so no change to
+# SpeechifyInc/speechify-api can fix it. Remove once the fix ships in
+# fernapi/fern-typescript-sdk (generated here at 3.70.1) and regen emits it.
+src/core/stream/Stream.ts
+
+# Covers the shielded Stream.ts. Holds an abort test that actually fails when
+# abort breaks (the generated one passed on its own `break` statement), plus
+# coverage for the SSE shape the with-timestamps endpoint really sends.
+# Remove together with src/core/stream/Stream.ts once the generator fix lands.
+tests/unit/stream/Stream.test.ts
+
+# Streaming example narrows on `item.type` and handles speech.error explicitly.
+# A mid-stream speech.error is yielded as a plain event, never thrown, because
+# the 200 is already committed by then. The generated example reported that as a
+# successful call with truncated audio. Also shows the
+# Buffer.from(audio, "base64") decode the SDK does not do for the caller.
+# Remove once the upstream endpoint example in SpeechifyInc/speechify-api
+# carries the same handling, or once the SDKs agree to raise speech.error from
+# the iterator, which is a cross-SDK decision affecting the Python SDK too.
+README.md
+
+# Same streaming example fix as README.md, in the generated endpoint reference.
+# COST: this freezes the entire reference. New endpoints, parameter changes and
+# description edits will not appear here on regen while this entry is listed.
+# Remove on the same upstream change as README.md.
+reference.md
