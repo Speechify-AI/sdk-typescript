@@ -48,6 +48,7 @@ export const ErrorCode = {
     AgentTestNotFound: "agent_test_not_found",
     WorkspaceNotFound: "workspace_not_found",
     InviteNotFound: "invite_not_found",
+    ProjectNotFound: "project_not_found",
     InsufficientScope: "insufficient_scope",
     PurchasedNumbersNotIncluded: "purchased_numbers_not_included",
     PhoneNumberQuotaReached: "phone_number_quota_reached",
