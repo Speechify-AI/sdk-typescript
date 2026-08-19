@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.1](https://github.com/Speechify-AI/sdk-typescript/compare/4.0.0...4.0.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* align Fern-generated SDK version strings with published 4.0.0 ([#18](https://github.com/Speechify-AI/sdk-typescript/issues/18)) ([3b72093](https://github.com/Speechify-AI/sdk-typescript/commit/3b720932f1c88586d217f35d43b58d1191b923a2))
+
 ## [4.0.0](https://github.com/Speechify-AI/sdk-typescript/compare/3.0.1...4.0.0) (2026-08-19)
 
 
