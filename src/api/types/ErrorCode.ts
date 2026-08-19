@@ -49,6 +49,7 @@ export const ErrorCode = {
     WorkspaceNotFound: "workspace_not_found",
     InviteNotFound: "invite_not_found",
     ProjectNotFound: "project_not_found",
+    CrossProjectReference: "cross_project_reference",
     InsufficientScope: "insufficient_scope",
     PurchasedNumbersNotIncluded: "purchased_numbers_not_included",
     PhoneNumberQuotaReached: "phone_number_quota_reached",
