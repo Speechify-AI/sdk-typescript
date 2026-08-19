@@ -16,8 +16,8 @@ describe("AudioClient", () => {
         const rawRequestBody = {
             audio_format: "mp3",
             input: "Hello! This is the Speechify text-to-speech API.",
-            model: "simba-english",
-            voice_id: "george",
+            model: "simba-3.2",
+            voice_id: "geffen_32",
         };
         const rawResponseBody = {
             audio_data: "example",
@@ -47,8 +47,8 @@ describe("AudioClient", () => {
         const response = await client.audio.speech({
             audio_format: "mp3",
             input: "Hello! This is the Speechify text-to-speech API.",
-            model: "simba-english",
-            voice_id: "george",
+            model: "simba-3.2",
+            voice_id: "geffen_32",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -301,6 +301,330 @@ describe("AudioClient", () => {
             return await client.audio.speech({
                 input: "input",
                 voice_id: "voice_id",
+            });
+        }).rejects.toThrow(Speechify.ServiceUnavailableError);
+    });
+
+    test("streamWithTimestamps (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: server.baseUrl,
+        });
+        const rawRequestBody = {
+            input: "Streaming long-form audio with the Speechify API.",
+            model: "simba-3.2",
+            voice_id: "geffen_32",
+        };
+        const rawResponseBody =
+            'event: \ndata: {"audio":"SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYxLjcuMTAw...","speech_marks":[{"end":5,"end_time":320,"start":0,"start_time":0,"type":"word","value":"Hello"}],"type":"speech.chunk"}\n\n';
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/stream/with-timestamps")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .sseBody(rawResponseBody)
+            .build();
+
+        const response = await client.audio.streamWithTimestamps({
+            body: {
+                input: "Streaming long-form audio with the Speechify API.",
+                model: "simba-3.2",
+                voice_id: "geffen_32",
+            },
+        });
+        const events: unknown[] = [];
+        for await (const event of response) {
+            events.push(event);
+        }
+        expect(events).toEqual([
+            {
+                type: "speech.chunk",
+                audio: "SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYxLjcuMTAw...",
+                speech_marks: [
+                    {
+                        end: 5,
+                        end_time: 320,
+                        start: 0,
+                        start_time: 0,
+                        type: "word",
+                        value: "Hello",
+                    },
+                ],
+            },
+        ]);
+    });
+
+    test("streamWithTimestamps (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: server.baseUrl,
+        });
+        const rawRequestBody = { input: "input", voice_id: "voice_id" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/stream/with-timestamps")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.audio.streamWithTimestamps({
+                body: {
+                    input: "input",
+                    voice_id: "voice_id",
+                },
+            });
+        }).rejects.toThrow(Speechify.BadRequestError);
+    });
+
+    test("streamWithTimestamps (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: server.baseUrl,
+        });
+        const rawRequestBody = { input: "input", voice_id: "voice_id" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/stream/with-timestamps")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.audio.streamWithTimestamps({
+                body: {
+                    input: "input",
+                    voice_id: "voice_id",
+                },
+            });
+        }).rejects.toThrow(Speechify.UnauthorizedError);
+    });
+
+    test("streamWithTimestamps (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: server.baseUrl,
+        });
+        const rawRequestBody = { input: "input", voice_id: "voice_id" };
+        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/stream/with-timestamps")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(402)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.audio.streamWithTimestamps({
+                body: {
+                    input: "input",
+                    voice_id: "voice_id",
+                },
+            });
+        }).rejects.toThrow(Speechify.PaymentRequiredError);
+    });
+
+    test("streamWithTimestamps (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: server.baseUrl,
+        });
+        const rawRequestBody = { input: "input", voice_id: "voice_id" };
+        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/stream/with-timestamps")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.audio.streamWithTimestamps({
+                body: {
+                    input: "input",
+                    voice_id: "voice_id",
+                },
+            });
+        }).rejects.toThrow(Speechify.ForbiddenError);
+    });
+
+    test("streamWithTimestamps (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: server.baseUrl,
+        });
+        const rawRequestBody = { input: "input", voice_id: "voice_id" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/stream/with-timestamps")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.audio.streamWithTimestamps({
+                body: {
+                    input: "input",
+                    voice_id: "voice_id",
+                },
+            });
+        }).rejects.toThrow(Speechify.NotFoundError);
+    });
+
+    test("streamWithTimestamps (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: server.baseUrl,
+        });
+        const rawRequestBody = { input: "input", voice_id: "voice_id" };
+        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/stream/with-timestamps")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.audio.streamWithTimestamps({
+                body: {
+                    input: "input",
+                    voice_id: "voice_id",
+                },
+            });
+        }).rejects.toThrow(Speechify.TooManyRequestsError);
+    });
+
+    test("streamWithTimestamps (8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: server.baseUrl,
+        });
+        const rawRequestBody = { input: "input", voice_id: "voice_id" };
+        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/stream/with-timestamps")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(500)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.audio.streamWithTimestamps({
+                body: {
+                    input: "input",
+                    voice_id: "voice_id",
+                },
+            });
+        }).rejects.toThrow(Speechify.InternalServerError);
+    });
+
+    test("streamWithTimestamps (9)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: server.baseUrl,
+        });
+        const rawRequestBody = { input: "input", voice_id: "voice_id" };
+        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/stream/with-timestamps")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(502)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.audio.streamWithTimestamps({
+                body: {
+                    input: "input",
+                    voice_id: "voice_id",
+                },
+            });
+        }).rejects.toThrow(Speechify.BadGatewayError);
+    });
+
+    test("streamWithTimestamps (10)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: server.baseUrl,
+        });
+        const rawRequestBody = { input: "input", voice_id: "voice_id" };
+        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/stream/with-timestamps")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(503)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.audio.streamWithTimestamps({
+                body: {
+                    input: "input",
+                    voice_id: "voice_id",
+                },
             });
         }).rejects.toThrow(Speechify.ServiceUnavailableError);
     });

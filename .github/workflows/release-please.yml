@@ -76,8 +76,294 @@ jobs:
         run: corepack enable
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      # src/BaseClient.ts and src/version.ts are Fern-generated and cannot be
+      # .fernignore'd, so an in-repo release-please marker does not survive:
+      # every regeneration strips the "// x-release-please-version" comments,
+      # the generic updater silently stops bumping these literals, and the SDK
+      # reports a version it is not. The release tag is the one input a
+      # regeneration cannot touch, so the versions are stamped from it.
+      #
+      # This runs BEFORE Build deliberately. `pnpm build` emits dist/, and dist/
+      # is what npm actually ships; a stamp placed after it would fix the
+      # sources and still publish the stale strings inside the artifact.
+      #
+      # These rewrites apply to the CI checkout ONLY and are never committed
+      # back, so main keeps whatever version Fern last generated and those
+      # strings are expected to read stale between releases. That is by design,
+      # not drift — do not "fix" them on main.
+      - name: Stamp Fern-generated version strings from the release tag
+        env:
+          TAG_NAME: ${{ needs.release-please.outputs.tag_name }}
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/stamp-release-versions.cjs" <<'NODE'
+          const fs = require("node:fs");
+          const path = require("node:path");
+
+          const fail = (message) => {
+            console.error(`::error::${message}`);
+            process.exit(1);
+          };
+
+          // include-v-in-tag is false, so the tag is bare semver. A leading "v" is
+          // tolerated so flipping that setting later cannot fail a valid release.
+          // A prerelease or build suffix is legal and must survive verbatim:
+          // 4.0.0-alpha.1 stamps as 4.0.0-alpha.1, never as 4.0.0. Anything that is
+          // not semver means the tag is not what we think it is — stop before writing.
+          const BARE_SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
+
+          const rawTag = (process.env.TAG_NAME || "").trim();
+          if (!rawTag) {
+            fail("release-please produced an empty tag_name — refusing to stamp");
+          }
+          const tag = rawTag.startsWith("v") ? rawTag.slice(1) : rawTag;
+          if (!BARE_SEMVER.test(tag)) {
+            fail(`tag "${rawTag}" is not bare semver — refusing to stamp`);
+          }
+
+          // Each pattern captures the literal surrounding the version so it is written
+          // back untouched; only the "version" group is replaced. They are anchored on
+          // the exact header names, which is what keeps "Speechify-Version" — the API
+          // date-version, not the SDK version — out of scope.
+          const STAMP_TARGETS = [
+            {
+              file: "src/version.ts",
+              label: "SDK_VERSION",
+              pattern: /(?<prefix>SDK_VERSION\s*=\s*")(?<version>[^"]*)(?<suffix>")/g,
+            },
+            {
+              file: "src/BaseClient.ts",
+              label: "X-Fern-SDK-Version",
+              pattern: /(?<prefix>"X-Fern-SDK-Version":\s*")(?<version>[^"]*)(?<suffix>")/g,
+            },
+            {
+              file: "src/BaseClient.ts",
+              label: "User-Agent",
+              pattern: /(?<prefix>"User-Agent":\s*"@speechify\/api\/)(?<version>[^"]*)(?<suffix>")/g,
+            },
+          ];
+
+          const readTextOrFail = (relativePath) => {
+            try {
+              return fs.readFileSync(path.join(process.cwd(), relativePath), "utf8");
+            } catch (error) {
+              return fail(`cannot read ${relativePath}: ${error.message}`);
+            }
+          };
+
+          const stampTargetInto = (source, target) => {
+            const matches = [...source.matchAll(target.pattern)];
+            if (matches.length === 0) {
+              // Never skip. A regeneration that renames or restructures this line has
+              // to break the release here, loudly — a stamp that quietly finds nothing
+              // is exactly how 2.0.1 shipped under a 3.0.0 tag.
+              fail(
+                `${target.file}: no ${target.label} version literal matched ` +
+                  `${target.pattern} — Fern regeneration has changed this file. Update ` +
+                  `the stamp step and the publish assertion before releasing.`,
+              );
+            }
+            for (const match of matches) {
+              const previous = match.groups.version;
+              const status = previous === tag ? "unchanged" : "stamped";
+              console.log(`  [${status}] ${target.file} ${target.label}: ${previous} -> ${tag}`);
+            }
+            return source.replace(target.pattern, `$<prefix>${tag}$<suffix>`);
+          };
+
+          console.log(`release tag: ${rawTag} (normalised: ${tag})`);
+
+          const originalFiles = new Map();
+          const stampedFiles = new Map();
+          for (const target of STAMP_TARGETS) {
+            if (!originalFiles.has(target.file)) {
+              const contents = readTextOrFail(target.file);
+              originalFiles.set(target.file, contents);
+              stampedFiles.set(target.file, contents);
+            }
+            stampedFiles.set(target.file, stampTargetInto(stampedFiles.get(target.file), target));
+          }
+
+          for (const [file, stamped] of stampedFiles) {
+            if (stamped === originalFiles.get(file)) {
+              console.log(`${file} already at ${tag}; nothing to rewrite.`);
+              continue;
+            }
+            fs.writeFileSync(path.join(process.cwd(), file), stamped);
+            console.log(`${file} stamped to ${tag}.`);
+          }
+
+          // Defensive: release-please already commits this bump via release-type
+          // "node". Stamping it too makes the tag the single source of truth for
+          // every version the published artifact carries.
+          const PACKAGE_JSON = "package.json";
+          const packageJsonText = readTextOrFail(PACKAGE_JSON);
+          let packageJson;
+          try {
+            packageJson = JSON.parse(packageJsonText);
+          } catch (error) {
+            fail(`cannot parse ${PACKAGE_JSON}: ${error.message}`);
+          }
+          if (typeof packageJson.version !== "string") {
+            fail(`${PACKAGE_JSON}: no string "version" field — refusing to stamp`);
+          }
+
+          const previousPackageVersion = packageJson.version;
+          const packageStatus = previousPackageVersion === tag ? "unchanged" : "stamped";
+          console.log(
+            `  [${packageStatus}] ${PACKAGE_JSON} version: ${previousPackageVersion} -> ${tag}`,
+          );
+          if (previousPackageVersion === tag) {
+            console.log(`${PACKAGE_JSON} already at ${tag}; nothing to rewrite.`);
+          } else {
+            packageJson.version = tag;
+            fs.writeFileSync(
+              path.join(process.cwd(), PACKAGE_JSON),
+              `${JSON.stringify(packageJson, null, 4)}\n`,
+            );
+            console.log(`${PACKAGE_JSON} stamped to ${tag}.`);
+          }
+          NODE
+          node "${RUNNER_TEMP}/stamp-release-versions.cjs"
       - name: Build
         run: pnpm build
+      # Every version-bearing property must agree with the release tag before
+      # anything reaches npm. This runs AFTER Build so it can check dist/ — the
+      # code that actually ships — as well as the sources the stamp step rewrote.
+      # It is an independent check of the stamp's result, not a restatement of
+      # it: the patterns are declared separately on purpose, and it still covers
+      # the files nothing stamps.
+      - name: Assert versions match release tag
+        env:
+          TAG_NAME: ${{ needs.release-please.outputs.tag_name }}
+          EXPECTED_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/assert-release-versions.cjs" <<'NODE'
+          const fs = require("node:fs");
+          const path = require("node:path");
+
+          const fail = (message) => {
+            console.error(`::error::${message}`);
+            process.exit(1);
+          };
+
+          // include-v-in-tag is false, so the tag is bare semver. A leading "v" is
+          // tolerated so flipping that setting later cannot fail a valid release, and
+          // a prerelease suffix (4.0.0-alpha.1) is compared verbatim. Normalisation
+          // matches the stamp step exactly, or the two would disagree by construction.
+          const BARE_SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
+
+          const rawTag = (process.env.TAG_NAME || "").trim();
+          if (!rawTag) {
+            fail("TAG_NAME is empty — refusing to publish an unidentified release");
+          }
+          const tag = rawTag.startsWith("v") ? rawTag.slice(1) : rawTag;
+          if (!BARE_SEMVER.test(tag)) {
+            fail(`tag "${rawTag}" is not bare semver — refusing to publish`);
+          }
+
+          const readTextOrFail = (relativePath, hint) => {
+            const absolutePath = path.join(process.cwd(), relativePath);
+            if (!fs.existsSync(absolutePath)) {
+              fail(`${relativePath} does not exist — ${hint}`);
+            }
+            return fs.readFileSync(absolutePath, "utf8");
+          };
+
+          const readJsonOrFail = (relativePath, hint) => {
+            const text = readTextOrFail(relativePath, hint);
+            try {
+              return JSON.parse(text);
+            } catch (error) {
+              return fail(`cannot parse ${relativePath}: ${error.message}`);
+            }
+          };
+
+          const SDK_VERSION_PATTERN = /SDK_VERSION\s*=\s*"([^"]+)"/;
+          const FERN_SDK_VERSION_PATTERN = /"X-Fern-SDK-Version":\s*"([^"]+)"/;
+          const USER_AGENT_PATTERN = /"User-Agent":\s*"@speechify\/api\/([^"]+)"/;
+
+          // src/ is what the stamp step rewrote; dist/ is what npm actually ships.
+          // Both are checked because they can disagree — a dist/ built before the
+          // stamp, or left over from an earlier build, carries the old strings while
+          // the sources look correct.
+          const TEXT_TARGETS = [
+            ["src/version.ts", "SDK_VERSION", SDK_VERSION_PATTERN],
+            ["src/BaseClient.ts", "X-Fern-SDK-Version", FERN_SDK_VERSION_PATTERN],
+            ["src/BaseClient.ts", "User-Agent", USER_AGENT_PATTERN],
+            ["dist/cjs/version.js", "SDK_VERSION", SDK_VERSION_PATTERN],
+            ["dist/cjs/BaseClient.js", "X-Fern-SDK-Version", FERN_SDK_VERSION_PATTERN],
+            ["dist/cjs/BaseClient.js", "User-Agent", USER_AGENT_PATTERN],
+            ["dist/esm/version.mjs", "SDK_VERSION", SDK_VERSION_PATTERN],
+            ["dist/esm/BaseClient.mjs", "X-Fern-SDK-Version", FERN_SDK_VERSION_PATTERN],
+            ["dist/esm/BaseClient.mjs", "User-Agent", USER_AGENT_PATTERN],
+          ];
+
+          const packageJson = readJsonOrFail("package.json", "the checkout is incomplete");
+          const metadata = readJsonOrFail(".fern/metadata.json", "the checkout is incomplete");
+          if (typeof metadata.sdkVersion !== "string") {
+            fail(".fern/metadata.json has no string sdkVersion — the json updater is not running");
+          }
+
+          const observedVersions = [
+            ["package.json version", packageJson.version],
+            [".fern/metadata.json sdkVersion", metadata.sdkVersion],
+          ];
+
+          for (const [file, label, pattern] of TEXT_TARGETS) {
+            const hint = file.startsWith("dist/")
+              ? "the Build step did not produce it"
+              : "Fern regeneration has moved or renamed it";
+            const match = readTextOrFail(file, hint).match(pattern);
+            // A missing match means the literal moved. That is the exact failure this
+            // step exists to catch, so it is fatal rather than skipped.
+            if (!match) {
+              fail(
+                `${file}: no ${label} version literal matched ${pattern} — the code has ` +
+                  `moved, so the stamp step is no longer rewriting it`,
+              );
+            }
+            observedVersions.push([`${file} ${label}`, match[1]]);
+          }
+
+          // npm resolves repository.url to a repo slug for provenance and rejects a
+          // case-inexact one with HTTP 422, so compare case-sensitively.
+          const expectedRepositoryUrl = `https://github.com/${process.env.EXPECTED_REPOSITORY}`;
+          const declaredRepositoryUrl = String(packageJson.repository?.url)
+            .replace(/^git\+/, "")
+            .replace(/\.git$/, "");
+
+          console.log(`release tag: ${rawTag} (normalised: ${tag})`);
+          for (const [label, version] of observedVersions) {
+            console.log(`  [${version === tag ? "ok" : "MISMATCH"}] ${label}: ${version}`);
+          }
+          console.log(`package.json repository.url:  ${packageJson.repository?.url}`);
+          console.log(`expected repository.url:      ${expectedRepositoryUrl}`);
+
+          const failures = observedVersions
+            .filter(([, version]) => version !== tag)
+            .map(([label, version]) => `${label} is "${version}", expected "${tag}"`);
+
+          if (declaredRepositoryUrl !== expectedRepositoryUrl) {
+            failures.push(
+              `package.json repository.url resolves to "${declaredRepositoryUrl}", expected ` +
+                `"${expectedRepositoryUrl}" — npm publish --provenance rejects a ` +
+                `case-inexact URL with HTTP 422`,
+            );
+          }
+
+          if (failures.length > 0) {
+            console.error("\nRefusing to publish:");
+            for (const failure of failures) {
+              console.error(`  - ${failure}`);
+            }
+            process.exit(1);
+          }
+
+          console.log(`\nAll version-bearing properties agree with ${tag}.`);
+          NODE
+          node "${RUNNER_TEMP}/assert-release-versions.cjs"
       - name: Publish to npm
         env:
           TAG_NAME: ${{ needs.release-please.outputs.tag_name }}

@@ -51,8 +51,8 @@ export class AudioClient {
      *     await client.audio.speech({
      *         audio_format: "mp3",
      *         input: "Hello! This is the Speechify text-to-speech API.",
-     *         model: "simba-english",
-     *         voice_id: "george"
+     *         model: "simba-3.2",
+     *         voice_id: "geffen_32"
      *     })
      */
     public speech(
@@ -71,7 +71,7 @@ export class AudioClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-07-07",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
             }),
             requestOptions?.headers,
         );
@@ -113,6 +113,11 @@ export class AudioClient {
                     throw new Speechify.ForbiddenError(_response.error.body as Speechify.Error_, _response.rawResponse);
                 case 404:
                     throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new Speechify.ContentTooLargeError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new Speechify.TooManyRequestsError(
                         _response.error.body as Speechify.Error_,
@@ -165,24 +170,24 @@ export class AudioClient {
      * @throws {@link Speechify.ServiceUnavailableError}
      */
     public stream(
-        request: Speechify.GetStreamRequest,
+        request: Speechify.StreamAudioRequest,
         requestOptions?: AudioClient.RequestOptions,
     ): core.HttpResponsePromise<core.BinaryResponse> {
         return core.HttpResponsePromise.fromPromise(this.__stream(request, requestOptions));
     }
 
     private async __stream(
-        request: Speechify.GetStreamRequest,
+        request: Speechify.StreamAudioRequest,
         requestOptions?: AudioClient.RequestOptions,
     ): Promise<core.WithRawResponse<core.BinaryResponse>> {
-        const { Accept: accept, ..._body } = request;
+        const { Accept: accept, body: _body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 Accept: accept,
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-07-07",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
             }),
             requestOptions?.headers,
         );
@@ -225,6 +230,11 @@ export class AudioClient {
                     throw new Speechify.ForbiddenError(_response.error.body as Speechify.Error_, _response.rawResponse);
                 case 404:
                     throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new Speechify.ContentTooLargeError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new Speechify.TooManyRequestsError(
                         _response.error.body as Speechify.Error_,
@@ -255,5 +265,146 @@ export class AudioClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/audio/stream");
+    }
+
+    /**
+     * Synthesize speech and stream it back together with word-level speech
+     * marks, for text highlighting, captions and audio-text synchronization
+     * while the audio is still arriving.
+     *
+     * The response is a Server-Sent Events stream. Each `speech.chunk` event
+     * carries a Base64-encoded run of audio, the speech marks that became
+     * final with it, or both - a chunk may carry only one of the two, and the
+     * last chunk of a stream is often marks-only. A terminal `speech.done`
+     * event ends the stream; there is no `[DONE]` sentinel. Ignore any event
+     * type you do not recognize, so that new event types do not break your
+     * integration.
+     *
+     * Speech-mark times are absolute milliseconds from the start of the
+     * synthesis, so concatenate the audio chunks into one stream and apply the
+     * marks against that single timeline. Which chunk a mark arrives on is a
+     * delivery detail and carries no meaning. Times stay correct for every
+     * `output_format`: changing the codec or sample rate does not change the
+     * duration.
+     *
+     * Speech marks are produced by the streaming-native models. The default
+     * `simba-3.0` and `simba-3.2` both serve this route; the legacy
+     * `simba-english` and `simba-multilingual` models return 400
+     * `speech_marks_unsupported` here.
+     * For Base64-encoded audio and speech marks in one non-streamed JSON
+     * response, on any model, use POST /v1/audio/speech.
+     */
+    public streamWithTimestamps(
+        request: Speechify.StreamWithTimestampsAudioRequest,
+        requestOptions?: AudioClient.RequestOptions,
+    ): core.HttpResponsePromise<core.Stream<Speechify.SpeechStreamEvent>> {
+        return core.HttpResponsePromise.fromPromise(this.__streamWithTimestamps(request, requestOptions));
+    }
+
+    private async __streamWithTimestamps(
+        request: Speechify.StreamWithTimestampsAudioRequest,
+        requestOptions?: AudioClient.RequestOptions,
+    ): Promise<core.WithRawResponse<core.Stream<Speechify.SpeechStreamEvent>>> {
+        const { Accept: accept, body: _body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({
+                Accept: accept,
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
+            }),
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher<ReadableStream>({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SpeechifyEnvironment.Default,
+                "v1/audio/stream/with-timestamps",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: _body,
+            responseType: "sse",
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: new core.Stream({
+                    stream: _response.body,
+                    parse: (data) => data as any,
+                    signal: requestOptions?.abortSignal,
+                    eventShape: {
+                        type: "sse",
+                        eventDiscriminator: "type",
+                    },
+                }),
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Speechify.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Speechify.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 402:
+                    throw new Speechify.PaymentRequiredError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Speechify.ForbiddenError(_response.error.body as Speechify.Error_, _response.rawResponse);
+                case 404:
+                    throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new Speechify.ContentTooLargeError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Speechify.TooManyRequestsError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Speechify.InternalServerError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                case 502:
+                    throw new Speechify.BadGatewayError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                case 503:
+                    throw new Speechify.ServiceUnavailableError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SpeechifyError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/v1/audio/stream/with-timestamps",
+        );
     }
 }

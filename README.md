@@ -1,6 +1,6 @@
 # Speechify TypeScript Library
 
-[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fspeechifyinc%2Fspeechify-api-sdk-typescript)
+[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2FSpeechify-AI%2Fsdk-typescript)
 [![npm shield](https://img.shields.io/npm/v/@speechify/api)](https://www.npmjs.com/package/@speechify/api)
 
 The Speechify TypeScript library provides convenient access to the Speechify APIs from TypeScript.
@@ -14,6 +14,7 @@ The Speechify TypeScript library provides convenient access to the Speechify API
 - [Environments](#environments)
 - [Request and Response Types](#request-and-response-types)
 - [Exception Handling](#exception-handling)
+- [Streaming Response](#streaming-response)
 - [File Uploads](#file-uploads)
 - [Binary Response](#binary-response)
 - [Pagination](#pagination)
@@ -42,7 +43,7 @@ npm i -s @speechify/api
 
 ## Reference
 
-A full reference for this library is available [here](https://github.com/speechifyinc/speechify-api-sdk-typescript/blob/HEAD/./reference.md).
+A full reference for this library is available [here](https://github.com/Speechify-AI/sdk-typescript/blob/HEAD/./reference.md).
 
 ## Usage
 
@@ -51,12 +52,12 @@ Instantiate and use the client with the following:
 ```typescript
 import { SpeechifyClient } from "@speechify/api";
 
-const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-07-07" });
+const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-13" });
 await client.audio.speech({
     audio_format: "mp3",
     input: "Hello! This is the Speechify text-to-speech API.",
-    model: "simba-english",
-    voice_id: "george"
+    model: "simba-3.2",
+    voice_id: "geffen_32"
 });
 ```
 
@@ -105,6 +106,62 @@ try {
 }
 ```
 
+## Streaming Response
+
+Some endpoints return streaming responses instead of returning the full response at once.
+The SDK uses async iterators, so you can consume the responses using a `for await...of` loop.
+
+```typescript
+import { SpeechifyClient } from "@speechify/api";
+
+const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-13" });
+const response = await client.audio.streamWithTimestamps({
+    body: {
+        input: "Streaming long-form audio with the Speechify API.",
+        model: "simba-3.2",
+        voice_id: "geffen_32"
+    }
+});
+
+const audioChunks: Buffer[] = [];
+
+for await (const item of response) {
+    switch (item.type) {
+        case "speech.chunk":
+            // `audio` is Base64 and the SDK does not decode it for you. It is
+            // absent on a marks-only chunk, which the last chunk often is.
+            if (item.audio != null) {
+                audioChunks.push(Buffer.from(item.audio, "base64"));
+            }
+            // Mark times are absolute ms from the start of the synthesis, so
+            // they apply to the concatenated audio, not to this chunk.
+            for (const mark of item.speech_marks ?? []) {
+                console.log(mark.start_time, mark.value);
+            }
+            break;
+
+        case "speech.error":
+            // A failure after the stream has opened arrives as an event, NOT as
+            // a thrown error: the 200 status is already committed. The SDK does
+            // not raise it for you, so handle it explicitly — otherwise the loop
+            // ends normally and you treat truncated audio as a success.
+            throw new Error(`${item.error.code}: ${item.error.message}`);
+
+        case "speech.done":
+            // Terminal event. There is no `[DONE]` sentinel.
+            console.log("billable characters:", item.billable_characters_count);
+            console.log("audio duration (ms):", item.audio_duration_ms);
+            break;
+
+        default:
+            // Ignore unrecognized event types so new ones cannot break you.
+            break;
+    }
+}
+
+const audio = Buffer.concat(audioChunks);
+```
+
 ## File Uploads
 
 You can upload files using the client:
@@ -114,13 +171,14 @@ import { createReadStream } from "fs";
 import * as fs from "fs";
 import { SpeechifyClient } from "@speechify/api";
 
-const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-07-07" });
+const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-13" });
 await client.voices.create({
     sample: fs.createReadStream("/path/to/your/file"),
+    consent_recording: fs.createReadStream("/path/to/your/file"),
     "Idempotency-Key": "a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
     name: "name",
     gender: "male",
-    consent: "consent"
+    consent_challenge_id: "consent_challenge_id"
 });
 ```
 The client accepts a variety of types for file upload parameters:
@@ -549,14 +607,20 @@ List endpoints are paginated. The SDK provides an iterator so that you can simpl
 ```typescript
 import { SpeechifyClient } from "@speechify/api";
 
-const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-07-07" });
-const pageableResponse = await client.voices.list();
+const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-13" });
+const pageableResponse = await client.voices.list({
+    locale: "en",
+    model: "simba-3.2"
+});
 for await (const item of pageableResponse) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.voices.list();
+let page = await client.voices.list({
+    locale: "en",
+    model: "simba-3.2"
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
