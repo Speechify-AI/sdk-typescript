@@ -113,6 +113,11 @@ export class AudioClient {
                     throw new Speechify.ForbiddenError(_response.error.body as Speechify.Error_, _response.rawResponse);
                 case 404:
                     throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new Speechify.ContentTooLargeError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new Speechify.TooManyRequestsError(
                         _response.error.body as Speechify.Error_,
@@ -225,6 +230,11 @@ export class AudioClient {
                     throw new Speechify.ForbiddenError(_response.error.body as Speechify.Error_, _response.rawResponse);
                 case 404:
                     throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new Speechify.ContentTooLargeError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new Speechify.TooManyRequestsError(
                         _response.error.body as Speechify.Error_,
@@ -356,6 +366,11 @@ export class AudioClient {
                     throw new Speechify.ForbiddenError(_response.error.body as Speechify.Error_, _response.rawResponse);
                 case 404:
                     throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new Speechify.ContentTooLargeError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new Speechify.TooManyRequestsError(
                         _response.error.body as Speechify.Error_,
