@@ -68,7 +68,7 @@ export class ConsentChallengesClient {
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "Idempotency-Key": idempotencyKey,
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-21",
             }),
             requestOptions?.headers,
         );

@@ -17,36 +17,13 @@ describe("ModelsClient", () => {
         const rawResponseBody = {
             models: [
                 {
-                    id: "simba-english",
-                    name: "Simba 1.6 English",
-                    default: false,
-                    recommended: false,
-                    deprecated: true,
-                    description: "Legacy Simba 1.6 English model, kept for compatibility. Prefer simba-3.2.",
-                    languages: ["en"],
-                    endpoints: ["/v1/audio/speech", "/v1/audio/stream"],
-                    curated_voices: false,
-                    english_voices_only: false,
-                },
-                {
-                    id: "simba-multilingual",
-                    name: "Simba 1.6 Multilingual",
-                    default: false,
-                    recommended: false,
-                    deprecated: true,
-                    description:
-                        "Legacy Simba 1.6 multilingual model covering 30+ languages, including mixed-language input. Prefer simba-3.0 for the languages it supports.",
-                    languages: ["en", "fr-FR", "de-DE", "es-MX", "pt-BR", "ja-JP"],
-                    endpoints: ["/v1/audio/speech", "/v1/audio/stream"],
-                    curated_voices: false,
-                    english_voices_only: false,
-                },
-                {
                     id: "simba-3.0",
                     name: "Simba 3.0",
                     default: true,
                     recommended: false,
                     deprecated: false,
+                    retired_at: "2026-09-21",
+                    sunset_at: "2026-11-21",
                     description:
                         "Streaming-native synthesis in English and six European languages, routed by the request `language`. The default when a request omits `model`.",
                     languages: ["en", "de-DE", "es-ES", "es-MX", "fr-FR", "it-IT", "pt-BR"],
@@ -60,6 +37,8 @@ describe("ModelsClient", () => {
                     default: false,
                     recommended: true,
                     deprecated: false,
+                    retired_at: "2026-09-21",
+                    sunset_at: "2026-11-21",
                     description:
                         "Streaming-native model with the lowest time-to-first-byte and richest expressivity, English only today. Serves the curated voice roster, plus your workspace's own cloned voices where cloning has been enabled for it.",
                     languages: ["en"],
@@ -75,6 +54,8 @@ describe("ModelsClient", () => {
                     default: true,
                     recommended: false,
                     deprecated: false,
+                    retired_at: "2026-09-21",
+                    sunset_at: "2026-11-21",
                     description:
                         "Multi-speaker model that renders a speaker-attributed script as one conversation with natural turn-taking.",
                     languages: ["en"],

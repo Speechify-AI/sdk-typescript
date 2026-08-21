@@ -25,12 +25,33 @@ export interface Model {
      */
     recommended: boolean;
     /**
-     * Whether this is a legacy model. Advisory only: a deprecated model
-     * stays selectable and behaves exactly as before, and nothing is
-     * scheduled for removal. De-emphasise it in a picker and steer new
-     * integrations to a current model.
+     * Whether this is a legacy model. De-emphasise it in a picker and
+     * steer new integrations to a current model. Read `retired_at` for
+     * whether it also has a withdrawal date.
      */
     deprecated: boolean;
+    /**
+     * The API version at which this model stops being selectable, as
+     * `YYYY-MM-DD`. Absent when the model has no withdrawal date.
+     *
+     * It appears only while your workspace is pinned BELOW that version -
+     * at or after it the model is absent from this catalog entirely, and
+     * naming it returns 400 `model_retired`. So a present value means "you
+     * can still use this, and this is the date you lose it". Pinning your
+     * API version before this date keeps the model working, up to
+     * `sunset_at`.
+     */
+    retired_at?: string | undefined;
+    /**
+     * The date this model is switched off, as `YYYY-MM-DD`. Absent when no
+     * shutdown is scheduled.
+     *
+     * This is the deadline `retired_at`'s version pin runs out against:
+     * from `sunset_at` the model is unreachable on EVERY API version,
+     * including a workspace pinned below its retirement. Read the two
+     * together - a pin buys time to migrate, not a permanent exemption.
+     */
+    sunset_at?: string | undefined;
     /** One-line summary of the model, for a model picker. */
     description: string;
     /**

@@ -74,6 +74,7 @@ export const ErrorCode = {
     ServiceAccountLimitReached: "service_account_limit_reached",
     ServiceAccountsNotInPlan: "service_accounts_not_in_plan",
     SpeechMarksUnsupported: "speech_marks_unsupported",
+    ModelRetired: "model_retired",
     TooManyVoices: "too_many_voices",
     ContentPolicyViolation: "content_policy_violation",
     TopupNotInPlan: "topup_not_in_plan",
