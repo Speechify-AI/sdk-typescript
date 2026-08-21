@@ -25,7 +25,7 @@ describe("ModelsClient", () => {
                     retired_at: "2026-09-21",
                     sunset_at: "2026-11-21",
                     description:
-                        "Streaming-native synthesis in English and six European languages, routed by the request `language`. The default when a request omits `model`.",
+                        "Streaming-native model serving both English and multilingual synthesis under one id: English, German, Spanish, French, Italian and Portuguese, routed by the request `language`. The default when a request omits `model`.",
                     languages: ["en", "de-DE", "es-ES", "es-MX", "fr-FR", "it-IT", "pt-BR"],
                     endpoints: ["/v1/audio/speech", "/v1/audio/stream", "/v1/audio/stream/with-timestamps"],
                     curated_voices: false,
@@ -40,7 +40,7 @@ describe("ModelsClient", () => {
                     retired_at: "2026-09-21",
                     sunset_at: "2026-11-21",
                     description:
-                        "Streaming-native model with the lowest time-to-first-byte and richest expressivity, English only today. Serves the curated voice roster, plus your workspace's own cloned voices where cloning has been enabled for it.",
+                        "Streaming-native model with the lowest time-to-first-byte and richest expressivity, English only today. Serves the curated voice roster, plus your workspace's own cloned voices where cloning has been enabled for it. Use `simba-3.0` for any other language.",
                     languages: ["en"],
                     endpoints: ["/v1/audio/speech", "/v1/audio/stream", "/v1/audio/stream/with-timestamps"],
                     curated_voices: true,
