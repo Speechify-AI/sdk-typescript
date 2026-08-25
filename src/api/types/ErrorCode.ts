@@ -52,6 +52,7 @@ export const ErrorCode = {
     CrossProjectReference: "cross_project_reference",
     ProjectHasScopedCredentials: "project_has_scoped_credentials",
     ProjectLimitReached: "project_limit_reached",
+    ProjectTooLargeToPromote: "project_too_large_to_promote",
     InsufficientScope: "insufficient_scope",
     PurchasedNumbersNotIncluded: "purchased_numbers_not_included",
     PhoneNumberQuotaReached: "phone_number_quota_reached",
