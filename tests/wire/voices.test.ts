@@ -26,6 +26,7 @@ describe("VoicesClient", () => {
                     id: "scott",
                     models: [{ languages: [{ locale: "locale" }], name: "simba-3.0" }],
                     preview_audio: "example",
+                    project_id: "proj_01kwxwcbyb6wk952swa0432cf1",
                     tags: ["example"],
                     type: "shared",
                 },
@@ -44,6 +45,7 @@ describe("VoicesClient", () => {
         const page = await client.voices.list({
             locale: "en",
             model: "simba-3.2",
+            project_id: "proj_01arz3ndektsv4rrffq69g5fav",
         });
 
         expect(expected.voices).toEqual(page.data);
@@ -159,6 +161,7 @@ describe("VoicesClient", () => {
             id: "scott",
             models: [{ languages: [{ locale: "locale" }], name: "simba-3.0" }],
             preview_audio: "example",
+            project_id: "proj_01kwxwcbyb6wk952swa0432cf1",
             tags: ["example"],
             type: "shared",
         };

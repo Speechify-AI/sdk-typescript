@@ -54,7 +54,8 @@ export class VoicesClient {
      * @example
      *     await client.voices.list({
      *         locale: "en",
-     *         model: "simba-3.2"
+     *         model: "simba-3.2",
+     *         project_id: "proj_01arz3ndektsv4rrffq69g5fav"
      *     })
      */
     public async list(
@@ -65,7 +66,7 @@ export class VoicesClient {
             async (
                 request: Speechify.ListVoicesRequest,
             ): Promise<core.WithRawResponse<Speechify.ListVoicesResponse>> => {
-                const { cursor, limit, type: type_, locale, gender, model } = request;
+                const { cursor, limit, type: type_, locale, gender, model, project_id: projectId } = request;
                 const _queryParams: Record<string, unknown> = {
                     cursor,
                     limit,
@@ -73,6 +74,7 @@ export class VoicesClient {
                     locale,
                     gender: gender != null ? gender : undefined,
                     model,
+                    project_id: projectId,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
