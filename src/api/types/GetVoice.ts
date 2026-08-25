@@ -12,13 +12,12 @@ export interface GetVoice {
     preview_audio?: (string | null) | undefined;
     /**
      * The workspace project this cloned voice is filed under, set when
-     * a project-pinned key created it. Returned on a single-voice read,
-     * on the create response, and on a list narrowed with the
-     * `project_id` parameter.
+     * a project-pinned key created it. Returned wherever a cloned voice
+     * is: the list, a single-voice read, and the create response.
      *
-     * Omitted for a shared-catalog voice, for a cloned voice the
-     * workspace holds at large, and on an unnarrowed list, where the
-     * catalog read does not carry each voice's project.
+     * Omitted for a shared-catalog voice and for a cloned voice no
+     * project filed, which is shared with the whole workspace and
+     * listed for every member of it.
      */
     project_id?: string | undefined;
     tags?: (string[] | null) | undefined;

@@ -34,13 +34,20 @@ export class VoicesClient {
 
     /**
      * Lists the voices available to the caller - the shared voice
-     * catalog plus the workspace's cloned voices, whichever member or
-     * service-account key created them. By default
+     * catalog plus the cloned voices they can reach, whichever member or
+     * service-account key created them. A clone filed under a project is
+     * listed only for a caller who can reach that project; a clone no
+     * project filed is shared with the whole workspace and is listed for
+     * everyone in it. By default
      * the full catalogue is returned in one response. Pagination is
      * opt-in: pass `limit` (and then `cursor` from the previous
      * response) to page through the list while `has_more` is true. Max
      * page size is 200. Narrow the list with the `type` and `locale`
-     * filters (applied before pagination, so pages stay full).
+     * filters.
+     *
+     * A page can come back with fewer than `limit` voices, and a short
+     * page - an empty one included - is not the end of the list. Keep
+     * following `next_cursor` while `has_more` is true.
      *
      * @param {Speechify.ListVoicesRequest} request
      * @param {VoicesClient.RequestOptions} requestOptions - Request-specific configuration.
