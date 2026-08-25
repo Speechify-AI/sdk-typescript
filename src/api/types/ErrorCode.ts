@@ -85,6 +85,7 @@ export const ErrorCode = {
     SpendBudgetExceeded: "spend_budget_exceeded",
     ProjectSpendLimitExceeded: "project_spend_limit_exceeded",
     ProjectArchived: "project_archived",
+    ProjectNotArchived: "project_not_archived",
     ShareLinkNotFound: "share_link_not_found",
     ShareLinkExhausted: "share_link_exhausted",
     ShareLinkLimitReached: "share_link_limit_reached",
