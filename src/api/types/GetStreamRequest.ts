@@ -41,7 +41,7 @@ export namespace GetStreamRequest {
          * simba-3.0 is the streaming-native multilingual model, and the default when `model` is omitted. Officially supports English plus de-DE, es-ES, es-MX, fr-FR, it-IT and pt-BR; the request language (or the voice's locale when it is omitted) selects the English or the multilingual training. Prefer simba-3.2 for English-only integrations. Cloned/personal voices work self-serve on simba-3.0. */
         Simba30: "simba-3.0",
         /**
-         * simba-3.2 is the streaming-native model with the lowest TTFB and richest expressivity. English only; a non-English voice returns 400 - use simba-3.0 for the other supported languages. Cloned voices are supported on simba-3.2 alongside the curated stock roster, currently as a limited release enabled per workspace - contact Speechify to have it enabled for yours. */
+         * simba-3.2 is the streaming-native model with the lowest TTFB and richest expressivity. English only; a non-English voice returns 400 - use simba-3.0 for the other supported languages. Cloned voices are supported on simba-3.2 alongside the curated stock roster. */
         Simba32: "simba-3.2",
     } as const;
     export type Model = (typeof Model)[keyof typeof Model];
