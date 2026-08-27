@@ -67,7 +67,7 @@ export function normalizeClientOptions<T extends BaseClientOptions = BaseClientO
             "User-Agent": "@speechify/api/4.0.2",
             "X-Fern-Runtime": core.RUNTIME.type,
             "X-Fern-Runtime-Version": core.RUNTIME.version,
-            "Speechify-Version": options?.version ?? "2026-09-21",
+            "Speechify-Version": options?.version ?? "2026-09-27",
         },
         options?.headers,
     );

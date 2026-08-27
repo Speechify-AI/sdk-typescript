@@ -88,7 +88,7 @@ export class VoicesClient {
                     _authRequest.headers,
                     this._options?.headers,
                     mergeOnlyDefinedHeaders({
-                        "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-21",
+                        "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-27",
                     }),
                     requestOptions?.headers,
                 );
@@ -231,7 +231,7 @@ export class VoicesClient {
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "Idempotency-Key": request["Idempotency-Key"],
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-21",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-27",
                 ..._maybeEncodedRequest.headers,
             }),
             requestOptions?.headers,
@@ -355,7 +355,7 @@ export class VoicesClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-21",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-27",
             }),
             requestOptions?.headers,
         );
@@ -458,7 +458,7 @@ export class VoicesClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-21",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-27",
             }),
             requestOptions?.headers,
         );
@@ -553,7 +553,7 @@ export class VoicesClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-21",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-27",
             }),
             requestOptions?.headers,
         );

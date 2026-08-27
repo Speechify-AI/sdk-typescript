@@ -34,6 +34,7 @@ export const ErrorCode = {
     CredentialNotFound: "credential_not_found",
     CredentialInUse: "credential_in_use",
     AgentNotFound: "agent_not_found",
+    AgentInUse: "agent_in_use",
     KbNotFound: "kb_not_found",
     KbDocumentNotFound: "kb_document_not_found",
     KbFolderNotFound: "kb_folder_not_found",
@@ -53,6 +54,11 @@ export const ErrorCode = {
     ProjectHasScopedCredentials: "project_has_scoped_credentials",
     ProjectLimitReached: "project_limit_reached",
     ProjectTooLargeToPromote: "project_too_large_to_promote",
+    CallNotFound: "call_not_found",
+    MessageNotFound: "message_not_found",
+    ThreadNotFound: "thread_not_found",
+    CallNotActive: "call_not_active",
+    RelayDisplacesAgent: "relay_displaces_agent",
     InsufficientScope: "insufficient_scope",
     PurchasedNumbersNotIncluded: "purchased_numbers_not_included",
     PhoneNumberQuotaReached: "phone_number_quota_reached",
@@ -94,5 +100,8 @@ export const ErrorCode = {
     ShareLinkLimitReached: "share_link_limit_reached",
     DestinationNotAllowed: "destination_not_allowed",
     InternationalDialingNotEnabled: "international_dialing_not_enabled",
+    NumberNotSmsCapable: "number_not_sms_capable",
+    VerificationRequired: "verification_required",
+    IntendedUseRequired: "intended_use_required",
 } as const;
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
