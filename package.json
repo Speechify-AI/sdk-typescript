@@ -6,6 +6,7 @@
         "type": "git",
         "url": "git+https://github.com/Speechify-AI/sdk-typescript.git"
     },
+    "license": "MIT",
     "type": "commonjs",
     "main": "./dist/cjs/index.js",
     "module": "./dist/esm/index.mjs",
