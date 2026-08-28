@@ -71,6 +71,8 @@ export const ErrorCode = {
     ConsentSpeakerMismatch: "consent_speaker_mismatch",
     ConsentRecordingUnusable: "consent_recording_unusable",
     ConsentVerificationUnavailable: "consent_verification_unavailable",
+    WatermarkAudioUnusable: "watermark_audio_unusable",
+    WatermarkDetectionUnavailable: "watermark_detection_unavailable",
     WorkspaceLastOwner: "workspace_last_owner",
     WorkspaceLastWorkspace: "workspace_last_workspace",
     AccountDeletionBlocked: "account_deletion_blocked",

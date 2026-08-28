@@ -55,6 +55,17 @@
             },
             "default": "./dist/cjs/api/resources/voices/exports.js"
         },
+        "./audio/watermark": {
+            "import": {
+                "types": "./dist/esm/api/resources/audio/resources/watermark/exports.d.mts",
+                "default": "./dist/esm/api/resources/audio/resources/watermark/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/audio/resources/watermark/exports.d.ts",
+                "default": "./dist/cjs/api/resources/audio/resources/watermark/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/audio/resources/watermark/exports.js"
+        },
         "./voices/consentChallenges": {
             "import": {
                 "types": "./dist/esm/api/resources/voices/resources/consentChallenges/exports.d.mts",
