@@ -147,4 +147,139 @@ export class WatermarkClient {
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/audio/watermark/detect");
     }
+
+    /**
+     * The public AI detection tool. Ask whether a clip carries the watermark
+     * Speechify seals into audio it generates, with no account, no API key and
+     * no credential of any kind.
+     *
+     * `verify` answers; `detect` measures. This route returns a bare yes or no,
+     * the way verifying a signature does. Its sibling
+     * `POST /v1/audio/watermark/detect` takes an API key and returns the
+     * detector's confidence alongside the verdict.
+     *
+     * This is the programmatic half of the tool published at
+     * <https://speechify.ai/detect>, and it exists so the tool can be invoked
+     * without visiting our website, as California's AI Transparency Act
+     * (BPC 22757.2) requires. Nothing about the clip is stored, and nothing
+     * identifying about you is collected or retained.
+     *
+     * The answer is a bare verdict. `watermarked: true` is positive evidence
+     * that the audio came from Speechify synthesis. `watermarked: false` is
+     * NOT proof that it did not: only models redeployed since the watermark
+     * shipped mark their output, the detector needs at least three seconds of
+     * clear speech to judge, and re-encoding or changing the speed of a clip
+     * degrades the mark. Treat a negative as the absence of evidence rather
+     * than as evidence of absence.
+     *
+     * Because the tool takes no credential, it is rate-limited per client
+     * address and shares a platform-wide budget: expect a 429 under sustained
+     * automated use, and retry after the interval the response advertises.
+     * Use `POST /v1/audio/watermark/detect` with an API key for the detector's
+     * confidence score and a per-workspace allowance of its own.
+     *
+     * @param {Speechify.audio.VerifyWatermarkRequest} request
+     * @param {WatermarkClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Speechify.BadRequestError}
+     * @throws {@link Speechify.ContentTooLargeError}
+     * @throws {@link Speechify.UnprocessableEntityError}
+     * @throws {@link Speechify.TooManyRequestsError}
+     * @throws {@link Speechify.InternalServerError}
+     * @throws {@link Speechify.BadGatewayError}
+     *
+     * @example
+     *     import { createReadStream } from "fs";
+     *     await client.audio.watermark.verify({
+     *         audio: fs.createReadStream("/path/to/your/file")
+     *     })
+     */
+    public verify(
+        request: Speechify.audio.VerifyWatermarkRequest,
+        requestOptions?: WatermarkClient.RequestOptions,
+    ): core.HttpResponsePromise<Speechify.WatermarkVerificationResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__verify(request, requestOptions));
+    }
+
+    private async __verify(
+        request: Speechify.audio.VerifyWatermarkRequest,
+        requestOptions?: WatermarkClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Speechify.WatermarkVerificationResponse>> {
+        const _body = await core.newFormData();
+        await _body.appendFile("audio", request.audio);
+        const _maybeEncodedRequest = await _body.getRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-27",
+                ..._maybeEncodedRequest.headers,
+            }),
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SpeechifyEnvironment.Default,
+                "v1/audio/watermark/verify",
+            ),
+            method: "POST",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "file",
+            duplex: _maybeEncodedRequest.duplex,
+            body: _maybeEncodedRequest.body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Speechify.WatermarkVerificationResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Speechify.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new Speechify.ContentTooLargeError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Speechify.UnprocessableEntityError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Speechify.TooManyRequestsError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Speechify.InternalServerError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                case 502:
+                    throw new Speechify.BadGatewayError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SpeechifyError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/audio/watermark/verify");
+    }
 }

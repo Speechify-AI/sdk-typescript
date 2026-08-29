@@ -22,3 +22,4 @@ export * from "./SpeechErrorEvent.js";
 export * from "./SpeechMarks.js";
 export * from "./SpeechStreamEvent.js";
 export * from "./WatermarkDetectionResponse.js";
+export * from "./WatermarkVerificationResponse.js";
