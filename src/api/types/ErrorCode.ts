@@ -59,6 +59,8 @@ export const ErrorCode = {
     ThreadNotFound: "thread_not_found",
     CallNotActive: "call_not_active",
     RelayDisplacesAgent: "relay_displaces_agent",
+    BrainNotFound: "brain_not_found",
+    BrainInUse: "brain_in_use",
     InsufficientScope: "insufficient_scope",
     PurchasedNumbersNotIncluded: "purchased_numbers_not_included",
     PhoneNumberQuotaReached: "phone_number_quota_reached",
