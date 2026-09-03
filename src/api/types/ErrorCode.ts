@@ -127,6 +127,7 @@ export const ErrorCode = {
     TextTurnFailed: "text_turn_failed",
     TextMessageQuotaExceeded: "text_message_quota_exceeded",
     DurableRunsNotInPlan: "durable_runs_not_in_plan",
+    ToolTransportUnsupported: "tool_transport_unsupported",
     AgentRunNotPending: "agent_run_not_pending",
     AgentRunActionStale: "agent_run_action_stale",
     ShareLinkNotFound: "share_link_not_found",
