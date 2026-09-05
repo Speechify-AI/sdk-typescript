@@ -131,6 +131,7 @@ export const ErrorCode = {
     AgentPublishGateFailed: "agent_publish_gate_failed",
     AgentPublishGateRequired: "agent_publish_gate_required",
     TextChannelNotInPlan: "text_channel_not_in_plan",
+    ChannelNotInPlan: "channel_not_in_plan",
     TextTurnFailed: "text_turn_failed",
     TextMessageQuotaExceeded: "text_message_quota_exceeded",
     DurableRunsNotInPlan: "durable_runs_not_in_plan",
