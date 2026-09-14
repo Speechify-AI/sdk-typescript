@@ -75,7 +75,7 @@ export class WatermarkClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-29",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
                 ..._maybeEncodedRequest.headers,
             }),
             requestOptions?.headers,
@@ -211,7 +211,7 @@ export class WatermarkClient {
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-29",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
                 ..._maybeEncodedRequest.headers,
             }),
             requestOptions?.headers,

@@ -61,7 +61,7 @@ export class ModelsClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-29",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
             }),
             requestOptions?.headers,
         );
