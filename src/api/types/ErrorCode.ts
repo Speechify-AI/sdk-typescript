@@ -79,6 +79,7 @@ export const ErrorCode = {
     RouteToolNotReadable: "route_tool_not_readable",
     RouteUpstreamRateLimited: "route_upstream_rate_limited",
     RouteUpstreamError: "route_upstream_error",
+    HostedMcpNotEnabled: "hosted_mcp_not_enabled",
     ConversationNotFound: "conversation_not_found",
     PhoneNumberNotFound: "phone_number_not_found",
     SipTrunkNotFound: "sip_trunk_not_found",
