@@ -77,6 +77,7 @@ export const ErrorCode = {
     RouteWriteLimitReached: "route_write_limit_reached",
     HostedApiPublicRefused: "hosted_api_public_refused",
     RouteToolNotReadable: "route_tool_not_readable",
+    RouteToolUnavailable: "route_tool_unavailable",
     RouteUpstreamRateLimited: "route_upstream_rate_limited",
     RouteUpstreamError: "route_upstream_error",
     HostedMcpNotEnabled: "hosted_mcp_not_enabled",
