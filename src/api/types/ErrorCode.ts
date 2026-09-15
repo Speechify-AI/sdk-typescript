@@ -69,6 +69,7 @@ export const ErrorCode = {
     AgentSkillLimitReached: "agent_skill_limit_reached",
     HostedApiSlugTaken: "hosted_api_slug_taken",
     ApiRouteConflict: "api_route_conflict",
+    MountPlanChanged: "mount_plan_changed",
     RouteOutputUnavailable: "route_output_unavailable",
     RouteRunTimeout: "route_run_timeout",
     RouteRunFailed: "route_run_failed",
