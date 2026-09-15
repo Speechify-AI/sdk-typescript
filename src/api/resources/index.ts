@@ -1,6 +1,9 @@
 export * from "./audio/client/requests/index.js";
 export * as audio from "./audio/index.js";
 export * from "./audio/types/index.js";
+export * from "./hostedApis/client/requests/index.js";
+export * as hostedApis from "./hostedApis/index.js";
+export * from "./hostedApis/types/index.js";
 export * as models from "./models/index.js";
 export * from "./voices/client/requests/index.js";
 export * as voices from "./voices/index.js";
