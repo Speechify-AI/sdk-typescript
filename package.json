@@ -56,17 +56,6 @@
             },
             "default": "./dist/cjs/api/resources/voices/exports.js"
         },
-        "./hostedApis": {
-            "import": {
-                "types": "./dist/esm/api/resources/hostedApis/exports.d.mts",
-                "default": "./dist/esm/api/resources/hostedApis/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/hostedApis/exports.d.ts",
-                "default": "./dist/cjs/api/resources/hostedApis/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/hostedApis/exports.js"
-        },
         "./audio/watermark": {
             "import": {
                 "types": "./dist/esm/api/resources/audio/resources/watermark/exports.d.mts",
@@ -77,28 +66,6 @@
                 "default": "./dist/cjs/api/resources/audio/resources/watermark/exports.js"
             },
             "default": "./dist/cjs/api/resources/audio/resources/watermark/exports.js"
-        },
-        "./hostedApis/routes": {
-            "import": {
-                "types": "./dist/esm/api/resources/hostedApis/resources/routes/exports.d.mts",
-                "default": "./dist/esm/api/resources/hostedApis/resources/routes/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/hostedApis/resources/routes/exports.d.ts",
-                "default": "./dist/cjs/api/resources/hostedApis/resources/routes/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/hostedApis/resources/routes/exports.js"
-        },
-        "./hostedApis/keys": {
-            "import": {
-                "types": "./dist/esm/api/resources/hostedApis/resources/keys/exports.d.mts",
-                "default": "./dist/esm/api/resources/hostedApis/resources/keys/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/hostedApis/resources/keys/exports.d.ts",
-                "default": "./dist/cjs/api/resources/hostedApis/resources/keys/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/hostedApis/resources/keys/exports.js"
         },
         "./voices/consentChallenges": {
             "import": {
