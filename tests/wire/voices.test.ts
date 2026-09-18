@@ -27,6 +27,7 @@ describe("VoicesClient", () => {
                     models: [{ languages: [{ locale: "locale" }], name: "simba-3.0" }],
                     preview_audio: "example",
                     project_id: "proj_01kwxwcbyb6wk952swa0432cf1",
+                    can_manage: true,
                     tags: ["example"],
                     type: "shared",
                 },
@@ -162,6 +163,7 @@ describe("VoicesClient", () => {
             models: [{ languages: [{ locale: "locale" }], name: "simba-3.0" }],
             preview_audio: "example",
             project_id: "proj_01kwxwcbyb6wk952swa0432cf1",
+            can_manage: true,
             tags: ["example"],
             type: "shared",
         };

@@ -20,6 +20,15 @@ export interface GetVoice {
      * listed for every member of it.
      */
     project_id?: string | undefined;
+    /**
+     * Whether this workspace may delete the voice and download its
+     * sample through this API. `true` for a cloned voice the workspace
+     * owns. `false` for a shared-catalog voice, and for a cloned voice
+     * that reaches this workspace only through its creator's personal
+     * account (a voice cloned before workspace ownership, or under
+     * another Speechify product), which is managed where it was made.
+     */
+    can_manage?: boolean | undefined;
     tags?: (string[] | null) | undefined;
     type: GetVoice.Type;
 }
