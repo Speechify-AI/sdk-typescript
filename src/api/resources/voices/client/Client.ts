@@ -171,7 +171,7 @@ export class VoicesClient {
      *
      * The clone belongs to the workspace rather than the member who created it, and access follows the caller's workspace role and API-key scopes exactly as for any other voice: voices scopes to list it, audio scopes to synthesize with it, and the content-management permission plus a write scope on the key to delete it. Cloned voices are usable self-serve on `simba-3.0` (and, on a workspace pinned before API version `2026-09-21`, on the retired `simba-english` and `simba-multilingual` until they are switched off on 2026-11-21). `simba-3.2` also serves cloned voices.
      *
-     * Callers pinned before `Speechify-Version: 2026-09-13` use the previous flow instead: no challenge, and a `consent` form field carrying the speaker's name and email as a JSON string. That flow is deprecated and will be removed after a sunset window announced in the changelog.
+     * Callers pinned before `Speechify-Version: 2026-09-13` use the previous flow instead: no challenge, and a `consent` form field carrying the speaker's name and email as a JSON string. That flow is switched off on **2026-10-07** for every API version: until then each create on it answers with `Deprecation` and `Sunset` headers naming the date, and from that date a create that sends `consent` and no `consent_challenge_id` returns 400 `consent_verification_required`.
      *
      * @param {Speechify.CreateVoicesRequest} request
      * @param {VoicesClient.RequestOptions} requestOptions - Request-specific configuration.
