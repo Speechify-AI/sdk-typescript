@@ -43,13 +43,15 @@ export interface Model {
      */
     retired_at?: string | undefined;
     /**
-     * The date this model is switched off, as `YYYY-MM-DD`. Absent when no
-     * shutdown is scheduled.
+     * The date this model's own training is switched off, as `YYYY-MM-DD`.
+     * Absent when no shutdown is scheduled.
      *
      * This is the deadline `retired_at`'s version pin runs out against:
-     * from `sunset_at` the model is unreachable on EVERY API version,
-     * including a workspace pinned below its retirement. Read the two
-     * together - a pin buys time to migrate, not a permanent exemption.
+     * from `sunset_at` the training behind the id changes on EVERY API
+     * version, including a workspace pinned below its retirement. The
+     * Simba 1.6 pair keeps answering from that date, served by our current
+     * models, so the change is to the audio, not to the request. Read the
+     * two together - a pin holds the old training, not forever.
      */
     sunset_at?: string | undefined;
     /** One-line summary of the model, for a model picker. */
