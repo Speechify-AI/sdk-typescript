@@ -60,6 +60,7 @@ export const ErrorCode = {
     StoreNotConfigured: "store_not_configured",
     StoreDocumentVersionConflict: "store_document_version_conflict",
     StoreDocumentDeleted: "store_document_deleted",
+    EntitlementOverrideExists: "entitlement_override_exists",
     HostedApisNotInPlan: "hosted_apis_not_in_plan",
     SkillsNotInPlan: "skills_not_in_plan",
     VoiceAgentsNotInPlan: "voice_agents_not_in_plan",
