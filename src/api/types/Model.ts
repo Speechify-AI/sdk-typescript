@@ -43,8 +43,8 @@ export interface Model {
      */
     retired_at?: string | undefined;
     /**
-     * The date this model's own training is switched off, as `YYYY-MM-DD`.
-     * Absent when no shutdown is scheduled.
+     * The date this model's own training stops serving this id, as
+     * `YYYY-MM-DD`. Absent when no sunset is scheduled.
      *
      * This is the deadline `retired_at`'s version pin runs out against:
      * from `sunset_at` the training behind the id changes on EVERY API
