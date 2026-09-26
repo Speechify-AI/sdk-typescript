@@ -140,6 +140,7 @@ export const ErrorCode = {
     ContentPolicyViolation: "content_policy_violation",
     TopupNotInPlan: "topup_not_in_plan",
     CreditPurchaseUnpaid: "credit_purchase_unpaid",
+    CreditPurchasePaymentInProgress: "credit_purchase_payment_in_progress",
     ToolConfigShared: "tool_config_shared",
     SpendCapExceeded: "spend_cap_exceeded",
     SpendBudgetExceeded: "spend_budget_exceeded",
