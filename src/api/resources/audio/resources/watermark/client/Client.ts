@@ -187,6 +187,7 @@ export class WatermarkClient {
      * @throws {@link Speechify.TooManyRequestsError}
      * @throws {@link Speechify.InternalServerError}
      * @throws {@link Speechify.BadGatewayError}
+     * @throws {@link Speechify.ServiceUnavailableError}
      *
      * @example
      *     import { createReadStream } from "fs";
@@ -268,6 +269,11 @@ export class WatermarkClient {
                     );
                 case 502:
                     throw new Speechify.BadGatewayError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
+                case 503:
+                    throw new Speechify.ServiceUnavailableError(
                         _response.error.body as Speechify.Error_,
                         _response.rawResponse,
                     );
