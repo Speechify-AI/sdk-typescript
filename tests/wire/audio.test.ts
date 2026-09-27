@@ -118,7 +118,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -146,7 +146,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -230,7 +230,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -258,7 +258,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -286,7 +286,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -314,7 +314,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -456,7 +456,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -486,7 +486,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -576,7 +576,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -606,7 +606,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -636,7 +636,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -666,7 +666,7 @@ describe("AudioClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()

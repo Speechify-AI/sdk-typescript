@@ -134,7 +134,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -158,7 +158,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -282,7 +282,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { url: "url", enabled_events: ["enabled_events", "enabled_events"] };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -338,7 +338,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { url: "url", enabled_events: ["enabled_events", "enabled_events"] };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -366,7 +366,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { url: "url", enabled_events: ["enabled_events", "enabled_events"] };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -394,7 +394,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { url: "url", enabled_events: ["enabled_events", "enabled_events"] };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -511,7 +511,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -537,7 +537,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -611,7 +611,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -663,7 +663,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -689,7 +689,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -816,7 +816,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = {};
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -870,7 +870,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = {};
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -897,7 +897,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = {};
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -987,7 +987,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -1039,7 +1039,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -1065,7 +1065,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -1220,7 +1220,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -1246,7 +1246,7 @@ describe("EndpointsClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()

@@ -100,7 +100,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server.mockEndpoint().get("/v1/voices").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
@@ -118,7 +118,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server.mockEndpoint().get("/v1/voices").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
@@ -136,7 +136,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server.mockEndpoint().get("/v1/voices").respondWith().statusCode(500).jsonBody(rawResponseBody).build();
 
@@ -269,7 +269,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -295,7 +295,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -321,7 +321,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -347,7 +347,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -442,7 +442,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -494,7 +494,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -520,7 +520,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -546,7 +546,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -572,7 +572,7 @@ describe("VoicesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()

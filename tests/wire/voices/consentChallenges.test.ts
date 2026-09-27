@@ -100,7 +100,7 @@ describe("ConsentChallengesClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -127,7 +127,7 @@ describe("ConsentChallengesClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -181,7 +181,7 @@ describe("ConsentChallengesClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -208,7 +208,7 @@ describe("ConsentChallengesClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -235,7 +235,7 @@ describe("ConsentChallengesClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -262,7 +262,7 @@ describe("ConsentChallengesClient", () => {
             environment: server.baseUrl,
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()

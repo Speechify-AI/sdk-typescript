@@ -9,6 +9,7 @@
  * idempotent requests.
  */
 export const ErrorCode = {
+    EndpointMoved: "endpoint_moved",
     BadRequest: "bad_request",
     ValidationFailed: "validation_failed",
     Unauthorized: "unauthorized",

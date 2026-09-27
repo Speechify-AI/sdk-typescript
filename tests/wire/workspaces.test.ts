@@ -100,7 +100,7 @@ describe("WorkspacesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -124,7 +124,7 @@ describe("WorkspacesClient", () => {
             environment: server.baseUrl,
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
