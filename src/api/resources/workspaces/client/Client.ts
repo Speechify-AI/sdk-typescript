@@ -39,8 +39,8 @@ export class WorkspacesClient {
      * any per-tenant override). Readable with an API key as well as a
      * console session: it is how an integration learns what it may use
      * before a feature endpoint answers `402`. Branch on
-     * `current.voice_cloning`, `current.hosted_apis_access` and
-     * `current.waymark_access`, and size traffic from
+     * `current.voice_cloning` and `current.hosted_apis_access`, and size
+     * traffic from
      * `current.tts_requests_per_second` and `current.tts_concurrency`. The
      * console renders quota affordances and upgrade-card limits from the
      * same single server-authoritative source instead of a hardcoded

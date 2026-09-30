@@ -24,8 +24,6 @@ export interface BillingEntitlements {
     topup_allowed: boolean;
     /** Whether voice cloning is available. */
     voice_cloning: boolean;
-    /** Whether Waymark API access is available. */
-    waymark_access: boolean;
     /** Whether stores and hosted APIs are available. Off on every plan; granted per workspace. */
     hosted_apis_access: boolean;
     /** Documents one store may hold; 0 means uncapped. */
