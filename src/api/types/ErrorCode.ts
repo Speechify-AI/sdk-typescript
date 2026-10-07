@@ -116,6 +116,7 @@ export const ErrorCode = {
     PhoneNumberQuotaReached: "phone_number_quota_reached",
     BatchCallsNotIncluded: "batch_calls_not_included",
     VoiceCloningNotIncluded: "voice_cloning_not_included",
+    VoiceCloningUnavailableInRegion: "voice_cloning_unavailable_in_region",
     ConsentChallengeNotFound: "consent_challenge_not_found",
     ConsentChallengeExpired: "consent_challenge_expired",
     ConsentChallengeAlreadyUsed: "consent_challenge_already_used",
