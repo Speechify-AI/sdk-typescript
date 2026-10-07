@@ -139,6 +139,7 @@ export const ErrorCode = {
     ModelRetired: "model_retired",
     TooManyVoices: "too_many_voices",
     ContentPolicyViolation: "content_policy_violation",
+    SafetyIdentifierBlocked: "safety_identifier_blocked",
     TopupNotInPlan: "topup_not_in_plan",
     CreditPurchaseUnpaid: "credit_purchase_unpaid",
     CreditPurchasePaymentInProgress: "credit_purchase_payment_in_progress",

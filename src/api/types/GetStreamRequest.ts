@@ -26,6 +26,8 @@ export interface GetStreamRequest {
     options?: Speechify.GetStreamOptionsRequest | undefined;
     /** The output audio format as a `codec_sampleRate_bitrate` string. Takes precedence over the `Accept` header when set, so you can request formats the `Accept` enum does not cover (e.g. `pcm_16000`, `ulaw_8000`). `wav_*` formats are not supported on streaming - use `POST /v1/audio/speech` for wav. */
     output_format?: Speechify.AudioStreamOutputFormat | undefined;
+    /** Optional. A stable, opaque identifier for the end user this request is made for: a hash of your own user id or an opaque id, never an email address or other personal data. It is recorded with the request even under zero data retention, and your workspace can be given per-end-user limits and a block list keyed on it. See https://docs.speechify.ai/build/guides/concepts/safety-identifiers. */
+    safety_identifier?: Speechify.SafetyIdentifier | undefined;
     /** Id of the voice to be used for synthesizing speech. Refer to /v1/voices endpoint for available voices */
     voice_id: string;
 }

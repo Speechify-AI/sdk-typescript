@@ -18,6 +18,18 @@ export interface BillingEntitlements {
     tts_requests_per_second: number;
     /** Simultaneous in-flight requests across the audio (TTS) endpoints. */
     tts_concurrency: number;
+    /**
+     * Sustained requests per second each end user (`safety_identifier`) may
+     * send across the audio (TTS) endpoints, inside the workspace's own
+     * limit. 0 means no per-end-user limit applies.
+     */
+    tts_end_user_requests_per_second: number;
+    /**
+     * Simultaneous in-flight requests each end user (`safety_identifier`)
+     * may hold across the audio (TTS) endpoints, inside the workspace's own
+     * limit. 0 means no per-end-user limit applies.
+     */
+    tts_end_user_concurrency: number;
     /** Whether the workspace may create ADDITIONAL workspaces. */
     can_create_workspaces: boolean;
     /** Whether prepaid funds may be added beyond the monthly grant. */

@@ -28,6 +28,7 @@ export * from "./ProjectMember.js";
 export * from "./ProjectMembersResponse.js";
 export * from "./ProjectRestore.js";
 export * from "./ProjectStillRevokedCounts.js";
+export * from "./SafetyIdentifier.js";
 export * from "./SpeechChunkEvent.js";
 export * from "./SpeechDoneEvent.js";
 export * from "./SpeechErrorEvent.js";
