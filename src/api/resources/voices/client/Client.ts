@@ -38,12 +38,12 @@ export class VoicesClient {
      * service-account key created them. A clone filed under a project is
      * listed only for a caller who can reach that project; a clone no
      * project filed is shared with the whole workspace and is listed for
-     * everyone in it. By default
-     * the full catalogue is returned in one response. Pagination is
-     * opt-in: pass `limit` (and then `cursor` from the previous
-     * response) to page through the list while `has_more` is true. Max
-     * page size is 200. Narrow the list with the `type` and `locale`
-     * filters.
+     * everyone in it. The list is paged: a request without `limit`
+     * returns the first 50 voices, and `limit` raises that to at most
+     * 200. Pass `cursor` from the previous response to fetch the next
+     * page while `has_more` is true. API versions before 2026-07-16
+     * returned the whole catalogue when `limit` was omitted. Narrow the
+     * list with the `type` and `locale` filters.
      *
      * A page can come back with fewer than `limit` voices, and a short
      * page - an empty one included - is not the end of the list. Keep
