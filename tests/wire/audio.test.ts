@@ -11,7 +11,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {
             audio_format: "mp3",
@@ -59,7 +59,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -87,7 +87,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -115,7 +115,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -143,7 +143,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -171,7 +171,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -199,7 +199,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -227,7 +227,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -255,7 +255,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -283,7 +283,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -311,7 +311,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -339,7 +339,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {
             input: "Streaming long-form audio with the Speechify API.",
@@ -393,7 +393,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -423,7 +423,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -453,7 +453,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -483,7 +483,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -513,7 +513,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -543,7 +543,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -573,7 +573,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -603,7 +603,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -633,7 +633,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -663,7 +663,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };

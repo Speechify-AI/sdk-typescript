@@ -11,7 +11,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = {
@@ -78,7 +78,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -96,7 +96,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -114,7 +114,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -132,7 +132,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -150,7 +150,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };

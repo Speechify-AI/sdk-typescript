@@ -11,7 +11,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = {
@@ -59,7 +59,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -83,7 +83,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -107,7 +107,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -131,7 +131,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -155,7 +155,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -179,7 +179,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {
             url: "https://example.com/speechify/webhooks",
@@ -223,7 +223,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { url: "url", enabled_events: ["enabled_events", "enabled_events"] };
         const rawResponseBody = { key: "value" };
@@ -251,7 +251,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { url: "url", enabled_events: ["enabled_events", "enabled_events"] };
         const rawResponseBody = { key: "value" };
@@ -279,7 +279,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { url: "url", enabled_events: ["enabled_events", "enabled_events"] };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -307,7 +307,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { url: "url", enabled_events: ["enabled_events", "enabled_events"] };
         const rawResponseBody = { key: "value" };
@@ -335,7 +335,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { url: "url", enabled_events: ["enabled_events", "enabled_events"] };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -363,7 +363,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { url: "url", enabled_events: ["enabled_events", "enabled_events"] };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -391,7 +391,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { url: "url", enabled_events: ["enabled_events", "enabled_events"] };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -419,7 +419,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = {
@@ -456,7 +456,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -482,7 +482,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -508,7 +508,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -534,7 +534,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -560,7 +560,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         server
@@ -582,7 +582,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -608,7 +608,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -634,7 +634,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -660,7 +660,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -686,7 +686,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -712,7 +712,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {
             url: "https://example.com/webhook",
@@ -759,7 +759,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
@@ -786,7 +786,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
@@ -813,7 +813,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {};
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -840,7 +840,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
@@ -867,7 +867,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {};
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -894,7 +894,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {};
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -921,7 +921,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = {
@@ -958,7 +958,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -984,7 +984,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -1010,7 +1010,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -1036,7 +1036,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -1062,7 +1062,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -1088,7 +1088,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = {
@@ -1139,7 +1139,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -1165,7 +1165,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -1191,7 +1191,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -1217,7 +1217,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -1243,7 +1243,7 @@ describe("EndpointsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };

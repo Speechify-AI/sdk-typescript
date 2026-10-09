@@ -71,8 +71,10 @@ export class EndpointsClient {
                 const _response = await core.fetcher({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.SpeechifyEnvironment.Default,
+                            (
+                                (await core.Supplier.get(this._options.environment)) ??
+                                environments.SpeechifyEnvironment.Default
+                            ).base,
                         "v1/webhooks/endpoints",
                     ),
                     method: "GET",
@@ -197,8 +199,8 @@ export class EndpointsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 "v1/webhooks/endpoints",
             ),
             method: "POST",
@@ -296,8 +298,8 @@ export class EndpointsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/webhooks/endpoints/${core.url.encodePathParam(webhookEndpointId)}`,
             ),
             method: "GET",
@@ -389,8 +391,8 @@ export class EndpointsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/webhooks/endpoints/${core.url.encodePathParam(webhookEndpointId)}`,
             ),
             method: "DELETE",
@@ -489,8 +491,8 @@ export class EndpointsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/webhooks/endpoints/${core.url.encodePathParam(webhookEndpointId)}`,
             ),
             method: "PATCH",
@@ -591,8 +593,8 @@ export class EndpointsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/webhooks/endpoints/${core.url.encodePathParam(webhookEndpointId)}/rotate-secret`,
             ),
             method: "POST",
@@ -701,8 +703,10 @@ export class EndpointsClient {
                 const _response = await core.fetcher({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.SpeechifyEnvironment.Default,
+                            (
+                                (await core.Supplier.get(this._options.environment)) ??
+                                environments.SpeechifyEnvironment.Default
+                            ).base,
                         `v1/webhooks/endpoints/${core.url.encodePathParam(webhookEndpointId)}/deliveries`,
                     ),
                     method: "GET",

@@ -77,8 +77,10 @@ export class ProjectsClient {
                 const _response = await core.fetcher({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.SpeechifyEnvironment.Default,
+                            (
+                                (await core.Supplier.get(this._options.environment)) ??
+                                environments.SpeechifyEnvironment.Default
+                            ).base,
                         "v1/projects",
                     ),
                     method: "GET",
@@ -187,8 +189,8 @@ export class ProjectsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 "v1/projects",
             ),
             method: "POST",
@@ -279,8 +281,8 @@ export class ProjectsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/projects/${core.url.encodePathParam(projectId)}`,
             ),
             method: "GET",
@@ -422,8 +424,8 @@ export class ProjectsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/projects/${core.url.encodePathParam(projectId)}`,
             ),
             method: "DELETE",
@@ -521,8 +523,8 @@ export class ProjectsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/projects/${core.url.encodePathParam(projectId)}`,
             ),
             method: "PATCH",
@@ -622,8 +624,8 @@ export class ProjectsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/projects/${core.url.encodePathParam(projectId)}/archive`,
             ),
             method: "POST",
@@ -716,8 +718,8 @@ export class ProjectsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/projects/${core.url.encodePathParam(projectId)}/unarchive`,
             ),
             method: "POST",
@@ -835,8 +837,8 @@ export class ProjectsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/projects/${core.url.encodePathParam(projectId)}/restore`,
             ),
             method: "POST",
@@ -947,8 +949,10 @@ export class ProjectsClient {
                 const _response = await core.fetcher({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.SpeechifyEnvironment.Default,
+                            (
+                                (await core.Supplier.get(this._options.environment)) ??
+                                environments.SpeechifyEnvironment.Default
+                            ).base,
                         `v1/projects/${core.url.encodePathParam(projectId)}/audit`,
                     ),
                     method: "GET",
@@ -1080,8 +1084,10 @@ export class ProjectsClient {
                 const _response = await core.fetcher({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.SpeechifyEnvironment.Default,
+                            (
+                                (await core.Supplier.get(this._options.environment)) ??
+                                environments.SpeechifyEnvironment.Default
+                            ).base,
                         `v1/projects/${core.url.encodePathParam(projectId)}/members`,
                     ),
                     method: "GET",
@@ -1205,8 +1211,8 @@ export class ProjectsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/projects/${core.url.encodePathParam(projectId)}/members`,
             ),
             method: "POST",
@@ -1311,8 +1317,8 @@ export class ProjectsClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/projects/${core.url.encodePathParam(projectId)}/members/${core.url.encodePathParam(userId)}`,
             ),
             method: "DELETE",

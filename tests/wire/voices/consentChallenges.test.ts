@@ -11,7 +11,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { full_name: "Jane Doe" };
         const rawResponseBody = {
@@ -43,7 +43,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { key: "value" };
@@ -70,7 +70,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { key: "value" };
@@ -97,7 +97,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -124,7 +124,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -151,7 +151,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { key: "value" };
@@ -178,7 +178,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -205,7 +205,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -232,7 +232,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -259,7 +259,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };

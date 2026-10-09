@@ -12,7 +12,7 @@ export type AuthOption =
     | BearerAuthProvider.AuthOptions;
 
 export type BaseClientOptions = {
-    environment?: core.Supplier<environments.SpeechifyEnvironment | string>;
+    environment?: core.Supplier<environments.SpeechifyEnvironment | environments.SpeechifyEnvironmentUrls>;
     /** Specify a custom URL to connect the client to. */
     baseUrl?: core.Supplier<string>;
     /** Override the Speechify-Version header */
