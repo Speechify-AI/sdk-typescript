@@ -27,6 +27,7 @@ export namespace GetVoicesModel {
         SimbaMultilingual: "simba-multilingual",
         Simba30: "simba-3.0",
         Simba32: "simba-3.2",
+        Simba35: "simba-3.5",
     } as const;
     export type Name = (typeof Name)[keyof typeof Name];
 }

@@ -4,5 +4,6 @@
 export const AudioStreamInputModel = {
     Simba30: "simba-3.0",
     Simba32: "simba-3.2",
+    Simba35: "simba-3.5",
 } as const;
 export type AudioStreamInputModel = (typeof AudioStreamInputModel)[keyof typeof AudioStreamInputModel];
