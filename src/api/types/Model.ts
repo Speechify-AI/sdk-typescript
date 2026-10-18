@@ -84,4 +84,13 @@ export interface Model {
      * voice.
      */
     english_voices_only: boolean;
+    /**
+     * The `languages` in which a synthesis request naming this model may
+     * carry `pronunciations`; empty when the model takes none. A request
+     * in any other language with a non-empty `pronunciations` returns 400
+     * `pronunciations_unsupported`, decided by the same language that
+     * picks the model's training: the request `language`, else the
+     * voice's locale.
+     */
+    pronunciation_languages: string[];
 }

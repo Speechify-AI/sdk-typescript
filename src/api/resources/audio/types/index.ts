@@ -4,6 +4,7 @@ export * from "./AudioStreamInputSpeechMarks.js";
 export * from "./InputClose.js";
 export * from "./InputFlush.js";
 export * from "./InputText.js";
+export * from "./SessionPronunciations.js";
 export * from "./SpeechChunk.js";
 export * from "./SpeechDone.js";
 export * from "./SpeechError.js";
