@@ -28,6 +28,7 @@ describe("VoicesClient", () => {
                     preview_audio: "example",
                     project_id: "proj_01kwxwcbyb6wk952swa0432cf1",
                     can_manage: true,
+                    staff_pick_rank: 1,
                     tags: ["example"],
                     type: "shared",
                 },
@@ -164,6 +165,7 @@ describe("VoicesClient", () => {
             preview_audio: "example",
             project_id: "proj_01kwxwcbyb6wk952swa0432cf1",
             can_manage: true,
+            staff_pick_rank: 1,
             tags: ["example"],
             type: "shared",
         };

@@ -29,6 +29,17 @@ export interface GetVoice {
      * another Speechify product), which is managed where it was made.
      */
     can_manage?: boolean | undefined;
+    /**
+     * This voice's place among the staff picks for its `locale`: `1`
+     * is the voice Speechify recommends first for that language, `2`
+     * the next, and so on. Omitted for a voice that is not a staff
+     * pick, and always for a cloned voice.
+     *
+     * Simba 3.5 sounds best with a voice native to the language you
+     * generate, so to choose a voice for a language, filter by
+     * `locale` and start from its lowest `staff_pick_rank`.
+     */
+    staff_pick_rank?: number | undefined;
     tags?: (string[] | null) | undefined;
     type: GetVoice.Type;
 }
