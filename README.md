@@ -52,11 +52,11 @@ Instantiate and use the client with the following:
 ```typescript
 import { SpeechifyClient } from "@speechify/api";
 
-const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-13" });
+const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-30" });
 await client.audio.speech({
     audio_format: "mp3",
     input: "Hello! This is the Speechify text-to-speech API.",
-    model: "simba-3.2",
+    model: "simba-3.5",
     voice_id: "geffen_32"
 });
 ```
@@ -114,11 +114,11 @@ The SDK uses async iterators, so you can consume the responses using a `for awai
 ```typescript
 import { SpeechifyClient } from "@speechify/api";
 
-const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-13" });
+const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-30" });
 const response = await client.audio.streamWithTimestamps({
     body: {
         input: "Streaming long-form audio with the Speechify API.",
-        model: "simba-3.2",
+        model: "simba-3.5",
         voice_id: "geffen_32"
     }
 });
@@ -143,7 +143,7 @@ for await (const item of response) {
         case "speech.error":
             // A failure after the stream has opened arrives as an event, NOT as
             // a thrown error: the 200 status is already committed. The SDK does
-            // not raise it for you, so handle it explicitly — otherwise the loop
+            // not raise it for you, so handle it explicitly, otherwise the loop
             // ends normally and you treat truncated audio as a success.
             throw new Error(`${item.error.code}: ${item.error.message}`);
 
@@ -171,7 +171,7 @@ import { createReadStream } from "fs";
 import * as fs from "fs";
 import { SpeechifyClient } from "@speechify/api";
 
-const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-13" });
+const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-30" });
 await client.voices.create({
     sample: fs.createReadStream("/path/to/your/file"),
     consent_recording: fs.createReadStream("/path/to/your/file"),
@@ -607,10 +607,10 @@ List endpoints are paginated. The SDK provides an iterator so that you can simpl
 ```typescript
 import { SpeechifyClient } from "@speechify/api";
 
-const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-13" });
+const client = new SpeechifyClient({ token: "YOUR_TOKEN", version: "2026-09-30" });
 const pageableResponse = await client.voices.list({
     locale: "en",
-    model: "simba-3.2"
+    model: "simba-3.5"
 });
 for await (const item of pageableResponse) {
     console.log(item);
@@ -619,7 +619,7 @@ for await (const item of pageableResponse) {
 // Or you can manually iterate page-by-page
 let page = await client.voices.list({
     locale: "en",
-    model: "simba-3.2"
+    model: "simba-3.5"
 });
 while (page.hasNextPage()) {
     page = page.getNextPage();
