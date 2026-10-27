@@ -5,7 +5,8 @@ import type * as Speechify from "../index.js";
 /**
  * Terminal event carrying the standard error envelope, emitted when a
  * failure happens after the stream has started and the status code is
- * already committed.
+ * already committed: an upstream fault (`upstream_failure`) or a content
+ * policy refusal (`content_policy_violation`).
  */
 export interface SpeechErrorEvent {
     error: Speechify.ErrorDetail;

@@ -12,7 +12,7 @@ export type AuthOption =
     | BearerAuthProvider.AuthOptions;
 
 export type BaseClientOptions = {
-    environment?: core.Supplier<environments.SpeechifyEnvironment | string>;
+    environment?: core.Supplier<environments.SpeechifyEnvironment | environments.SpeechifyEnvironmentUrls>;
     /** Specify a custom URL to connect the client to. */
     baseUrl?: core.Supplier<string>;
     /** Override the Speechify-Version header */
@@ -63,11 +63,11 @@ export function normalizeClientOptions<T extends BaseClientOptions = BaseClientO
         {
             "X-Fern-Language": "JavaScript",
             "X-Fern-SDK-Name": "@speechify/api",
-            "X-Fern-SDK-Version": "4.0.1",
-            "User-Agent": "@speechify/api/4.0.1",
+            "X-Fern-SDK-Version": "4.0.2",
+            "User-Agent": "@speechify/api/4.0.2",
             "X-Fern-Runtime": core.RUNTIME.type,
             "X-Fern-Runtime-Version": core.RUNTIME.version,
-            "Speechify-Version": options?.version ?? "2026-09-13",
+            "Speechify-Version": options?.version ?? "2026-09-30",
         },
         options?.headers,
     );

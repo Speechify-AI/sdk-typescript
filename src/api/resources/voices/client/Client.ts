@@ -34,13 +34,20 @@ export class VoicesClient {
 
     /**
      * Lists the voices available to the caller - the shared voice
-     * catalog plus the workspace's cloned voices, whichever member or
-     * service-account key created them. By default
-     * the full catalogue is returned in one response. Pagination is
-     * opt-in: pass `limit` (and then `cursor` from the previous
-     * response) to page through the list while `has_more` is true. Max
-     * page size is 200. Narrow the list with the `type` and `locale`
-     * filters (applied before pagination, so pages stay full).
+     * catalog plus the cloned voices they can reach, whichever member or
+     * service-account key created them. A clone filed under a project is
+     * listed only for a caller who can reach that project; a clone no
+     * project filed is shared with the whole workspace and is listed for
+     * everyone in it. The list is paged: a request without `limit`
+     * returns the first 50 voices, and `limit` raises that to at most
+     * 200. Pass `cursor` from the previous response to fetch the next
+     * page while `has_more` is true. API versions before 2026-07-16
+     * returned the whole catalogue when `limit` was omitted. Narrow the
+     * list with the `type` and `locale` filters.
+     *
+     * A page can come back with fewer than `limit` voices, and a short
+     * page - an empty one included - is not the end of the list. Keep
+     * following `next_cursor` while `has_more` is true.
      *
      * @param {Speechify.ListVoicesRequest} request
      * @param {VoicesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -54,7 +61,8 @@ export class VoicesClient {
      * @example
      *     await client.voices.list({
      *         locale: "en",
-     *         model: "simba-3.2"
+     *         model: "simba-3.2",
+     *         project_id: "proj_01arz3ndektsv4rrffq69g5fav"
      *     })
      */
     public async list(
@@ -65,7 +73,7 @@ export class VoicesClient {
             async (
                 request: Speechify.ListVoicesRequest,
             ): Promise<core.WithRawResponse<Speechify.ListVoicesResponse>> => {
-                const { cursor, limit, type: type_, locale, gender, model } = request;
+                const { cursor, limit, type: type_, locale, gender, model, project_id: projectId } = request;
                 const _queryParams: Record<string, unknown> = {
                     cursor,
                     limit,
@@ -73,21 +81,24 @@ export class VoicesClient {
                     locale,
                     gender: gender != null ? gender : undefined,
                     model,
+                    project_id: projectId,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
                     this._options?.headers,
                     mergeOnlyDefinedHeaders({
-                        "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
+                        "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
                     }),
                     requestOptions?.headers,
                 );
                 const _response = await core.fetcher({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.SpeechifyEnvironment.Default,
+                            (
+                                (await core.Supplier.get(this._options.environment)) ??
+                                environments.SpeechifyEnvironment.Default
+                            ).base,
                         "v1/voices",
                     ),
                     method: "GET",
@@ -160,9 +171,11 @@ export class VoicesClient {
      *
      * Cloning requires proof that the speaker agreed to it. Create a consent challenge with `POST /v1/voices/consent-challenges`, show the returned `phrase` to the speaker, record them reading it aloud, and send that recording here as `consent_recording` together with the challenge's `consent_challenge_id`. Speechify transcribes the recording, checks it against the phrase it issued, checks that its speaker is the speaker in your `sample`, and keeps it as the consent record for the voice. The person consenting therefore has to be the person being cloned. A challenge is single use and short-lived, so record and submit in one sitting.
      *
-     * The clone belongs to the workspace rather than the member who created it, and access follows the caller's workspace role and API-key scopes exactly as for any other voice: voices scopes to list it, audio scopes to synthesize with it, and the content-management permission plus a write scope on the key to delete it. Cloned voices are usable self-serve on `simba-3.0`, `simba-english` and `simba-multilingual`. `simba-3.2` also serves cloned voices, currently as a limited release enabled per workspace; contact Speechify to have it enabled for yours.
+     * The clone belongs to the workspace rather than the member who created it, and access follows the caller's workspace role and API-key scopes exactly as for any other voice: voices scopes to list it, audio scopes to synthesize with it, and the content-management permission plus a write scope on the key to delete it. Cloned voices are usable self-serve on `simba-3.0` (and, on a workspace pinned before API version `2026-09-21`, on the retired `simba-english` and `simba-multilingual`, which from 2026-11-21 are served by our current models and still take cloned voices). `simba-3.2` and `simba-3.5` also serve cloned voices.
      *
-     * Callers pinned before `Speechify-Version: 2026-09-13` use the previous flow instead: no challenge, and a `consent` form field carrying the speaker's name and email as a JSON string. That flow is deprecated and will be removed after a sunset window announced in the changelog.
+     * The previous flow, a `consent` form field carrying the speaker's name and email as a JSON string, was switched off on 2026-09-23 for every API version: a create that sends `consent` and no `consent_challenge_id` returns 400 `consent_verification_required`.
+     *
+     * Voice cloning is not available in some jurisdictions. A request from one returns 403 `voice_cloning_unavailable_in_region` before consent verification runs, so it does not spend the challenge. The location is read from the IP address that sends the request, which is your server's when your backend calls the API; a location header in the request is ignored.
      *
      * @param {Speechify.CreateVoicesRequest} request
      * @param {VoicesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -222,7 +235,7 @@ export class VoicesClient {
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "Idempotency-Key": request["Idempotency-Key"],
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
                 ..._maybeEncodedRequest.headers,
             }),
             requestOptions?.headers,
@@ -230,8 +243,8 @@ export class VoicesClient {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 "v1/voices",
             ),
             method: "POST",
@@ -346,15 +359,15 @@ export class VoicesClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
             }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/voices/${core.url.encodePathParam(voiceId)}`,
             ),
             method: "GET",
@@ -415,6 +428,10 @@ export class VoicesClient {
      * `content.manage` permission (owner, admin, or member); a
      * service-account key is authorized by its scopes instead.
      *
+     * A voice that is also a member's personal voice (one cloned
+     * before workspaces owned voices and adopted into this workspace)
+     * is removed from the workspace only; the person keeps it.
+     *
      * @param {Speechify.DeleteVoicesRequest} request
      * @param {VoicesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -449,15 +466,15 @@ export class VoicesClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
             }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/voices/${core.url.encodePathParam(voiceId)}`,
             ),
             method: "DELETE",
@@ -544,15 +561,15 @@ export class VoicesClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
             }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher<core.BinaryResponse>({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 `v1/voices/${core.url.encodePathParam(voiceId)}/sample`,
             ),
             method: "GET",

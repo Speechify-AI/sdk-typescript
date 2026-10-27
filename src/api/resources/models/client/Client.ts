@@ -61,15 +61,15 @@ export class ModelsClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
             }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 "v1/audio/models",
             ),
             method: "GET",

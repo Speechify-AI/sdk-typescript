@@ -11,7 +11,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
         const rawRequestBody = { full_name: "Jane Doe" };
         const rawResponseBody = {
@@ -43,7 +43,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { key: "value" };
@@ -70,7 +70,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { key: "value" };
@@ -97,10 +97,10 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -124,10 +124,10 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -151,7 +151,7 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
         const rawResponseBody = { key: "value" };
@@ -178,10 +178,10 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -205,10 +205,10 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -232,10 +232,10 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -259,10 +259,10 @@ describe("ConsentChallengesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
         const rawRequestBody = { full_name: "full_name" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()

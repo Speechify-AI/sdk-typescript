@@ -3,7 +3,14 @@
 import type * as Speechify from "../index.js";
 
 /**
- * The catalog of text-to-speech models available for synthesis.
+ * The catalog of text-to-speech models available for synthesis. The list
+ * is scoped to your workspace's API version: a model retired at or before
+ * it is absent here and returns 400 `model_retired` from the synthesis
+ * endpoints, so what this returns is exactly what you can call. The
+ * example below is the catalog at the current version - a workspace pinned
+ * before `2026-09-21` also sees `simba-english` and `simba-multilingual`,
+ * each carrying `retired_at` and the `sunset_at` date its pin expires
+ * against.
  */
 export interface ModelsResponse {
     /** The models selectable on the single-utterance synthesis endpoints. */

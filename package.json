@@ -1,11 +1,12 @@
 {
     "name": "@speechify/api",
-    "version": "4.0.1",
+    "version": "4.0.2",
     "private": false,
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Speechify-AI/sdk-typescript.git"
     },
+    "license": "MIT",
     "type": "commonjs",
     "main": "./dist/cjs/index.js",
     "module": "./dist/esm/index.mjs",
@@ -55,6 +56,39 @@
             },
             "default": "./dist/cjs/api/resources/voices/exports.js"
         },
+        "./projects": {
+            "import": {
+                "types": "./dist/esm/api/resources/projects/exports.d.mts",
+                "default": "./dist/esm/api/resources/projects/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/projects/exports.d.ts",
+                "default": "./dist/cjs/api/resources/projects/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/projects/exports.js"
+        },
+        "./workspaces": {
+            "import": {
+                "types": "./dist/esm/api/resources/workspaces/exports.d.mts",
+                "default": "./dist/esm/api/resources/workspaces/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/workspaces/exports.d.ts",
+                "default": "./dist/cjs/api/resources/workspaces/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/workspaces/exports.js"
+        },
+        "./audio/watermark": {
+            "import": {
+                "types": "./dist/esm/api/resources/audio/resources/watermark/exports.d.mts",
+                "default": "./dist/esm/api/resources/audio/resources/watermark/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/audio/resources/watermark/exports.d.ts",
+                "default": "./dist/cjs/api/resources/audio/resources/watermark/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/audio/resources/watermark/exports.js"
+        },
         "./voices/consentChallenges": {
             "import": {
                 "types": "./dist/esm/api/resources/voices/resources/consentChallenges/exports.d.mts",
@@ -65,6 +99,28 @@
                 "default": "./dist/cjs/api/resources/voices/resources/consentChallenges/exports.js"
             },
             "default": "./dist/cjs/api/resources/voices/resources/consentChallenges/exports.js"
+        },
+        "./webhooks": {
+            "import": {
+                "types": "./dist/esm/api/resources/webhooks/exports.d.mts",
+                "default": "./dist/esm/api/resources/webhooks/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/webhooks/exports.d.ts",
+                "default": "./dist/cjs/api/resources/webhooks/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/webhooks/exports.js"
+        },
+        "./webhooks/endpoints": {
+            "import": {
+                "types": "./dist/esm/api/resources/webhooks/resources/endpoints/exports.d.mts",
+                "default": "./dist/esm/api/resources/webhooks/resources/endpoints/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/webhooks/resources/endpoints/exports.d.ts",
+                "default": "./dist/cjs/api/resources/webhooks/resources/endpoints/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/webhooks/resources/endpoints/exports.js"
         },
         "./package.json": "./package.json"
     },

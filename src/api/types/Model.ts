@@ -14,8 +14,8 @@ export interface Model {
     /**
      * Whether this is the model used when a synthesis request omits
      * `model`. Exactly one model in the list is the default. Distinct
-     * from `recommended`: the default accepts every voice, while the
-     * recommended model may serve a curated or English-only set.
+     * from `recommended`: the default accepts every voice in every
+     * language, while the recommended model may be English-only.
      */
     default: boolean;
     /**
@@ -25,12 +25,35 @@ export interface Model {
      */
     recommended: boolean;
     /**
-     * Whether this is a legacy model. Advisory only: a deprecated model
-     * stays selectable and behaves exactly as before, and nothing is
-     * scheduled for removal. De-emphasise it in a picker and steer new
-     * integrations to a current model.
+     * Whether this is a legacy model. De-emphasise it in a picker and
+     * steer new integrations to a current model. Read `retired_at` for
+     * whether it also has a withdrawal date.
      */
     deprecated: boolean;
+    /**
+     * The API version at which this model stops being selectable, as
+     * `YYYY-MM-DD`. Absent when the model has no withdrawal date.
+     *
+     * It appears only while your workspace is pinned BELOW that version -
+     * at or after it the model is absent from this catalog entirely, and
+     * naming it returns 400 `model_retired`. So a present value means "you
+     * can still use this, and this is the date you lose it". Pinning your
+     * API version before this date keeps the model working, up to
+     * `sunset_at`.
+     */
+    retired_at?: string | undefined;
+    /**
+     * The date this model's own training stops serving this id, as
+     * `YYYY-MM-DD`. Absent when no sunset is scheduled.
+     *
+     * This is the deadline `retired_at`'s version pin runs out against:
+     * from `sunset_at` the training behind the id changes on EVERY API
+     * version, including a workspace pinned below its retirement. The
+     * Simba 1.6 pair keeps answering from that date, served by our current
+     * models, so the change is to the audio, not to the request. Read the
+     * two together - a pin holds the old training, not forever.
+     */
+    sunset_at?: string | undefined;
     /** One-line summary of the model, for a model picker. */
     description: string;
     /**
@@ -41,20 +64,18 @@ export interface Model {
      */
     languages: string[];
     /**
-     * The synthesis routes this model may be passed to. Only the
-     * streaming-native models serve `/v1/audio/stream/with-timestamps`;
-     * passing a model this list omits is a 400 rather than a degraded
-     * response, so branch on it instead of discovering it at call time.
+     * The synthesis routes this model may be passed to. Passing it to a
+     * route this list omits is a 400 rather than a degraded response, so
+     * branch on it instead of discovering it at call time.
      */
     endpoints: string[];
     /**
-     * Whether the model's stock voices are restricted to the set curated
-     * for it. When true, pick a stock voice whose `models` array in
-     * GET /v1/voices names this model; any other stock voice is rejected.
-     * When false, every stock catalogue voice works. Cloned voices are
-     * governed separately - always read each voice's own `models` array in
-     * GET /v1/voices, which reflects what your workspace may actually
-     * synthesize.
+     * Deprecated and always `false`. No model restricts synthesis to a
+     * registered voice set: every training conditions on the voice's own
+     * prompt audio, so every catalogue voice and every cloned voice works
+     * on every model, subject only to `english_voices_only`. Each voice's
+     * `models` array in GET /v1/voices stays the per-voice answer. The
+     * field remains on the response for compatibility.
      */
     curated_voices: boolean;
     /**
@@ -63,4 +84,13 @@ export interface Model {
      * voice.
      */
     english_voices_only: boolean;
+    /**
+     * The `languages` in which a synthesis request naming this model may
+     * carry `pronunciations`; empty when the model takes none. A request
+     * in any other language with a non-empty `pronunciations` returns 400
+     * `pronunciations_unsupported`, decided by the same language that
+     * picks the model's training: the request `language`, else the
+     * voice's locale.
+     */
+    pronunciation_languages: string[];
 }

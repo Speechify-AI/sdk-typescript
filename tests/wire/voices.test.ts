@@ -11,7 +11,7 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = {
@@ -24,8 +24,11 @@ describe("VoicesClient", () => {
                     gender: "male",
                     locale: "en-US",
                     id: "scott",
-                    models: [{ languages: [{ locale: "locale" }], name: "simba-english" }],
+                    models: [{ languages: [{ locale: "locale" }], name: "simba-3.0" }],
                     preview_audio: "example",
+                    project_id: "proj_01kwxwcbyb6wk952swa0432cf1",
+                    can_manage: true,
+                    staff_pick_rank: 1,
                     tags: ["example"],
                     type: "shared",
                 },
@@ -44,6 +47,7 @@ describe("VoicesClient", () => {
         const page = await client.voices.list({
             locale: "en",
             model: "simba-3.2",
+            project_id: "proj_01arz3ndektsv4rrffq69g5fav",
         });
 
         expect(expected.voices).toEqual(page.data);
@@ -58,7 +62,7 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -76,7 +80,7 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -94,10 +98,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server.mockEndpoint().get("/v1/voices").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
@@ -112,10 +116,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server.mockEndpoint().get("/v1/voices").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
@@ -130,10 +134,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server.mockEndpoint().get("/v1/voices").respondWith().statusCode(500).jsonBody(rawResponseBody).build();
 
@@ -148,7 +152,7 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = {
@@ -157,8 +161,11 @@ describe("VoicesClient", () => {
             gender: "male",
             locale: "en-US",
             id: "scott",
-            models: [{ languages: [{ locale: "locale" }], name: "simba-english" }],
+            models: [{ languages: [{ locale: "locale" }], name: "simba-3.0" }],
             preview_audio: "example",
+            project_id: "proj_01kwxwcbyb6wk952swa0432cf1",
+            can_manage: true,
+            staff_pick_rank: 1,
             tags: ["example"],
             type: "shared",
         };
@@ -183,7 +190,7 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -209,7 +216,7 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -235,7 +242,7 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -261,10 +268,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -287,10 +294,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -313,10 +320,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -339,10 +346,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -365,7 +372,7 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         server.mockEndpoint().delete("/v1/voices/voice_id").respondWith().statusCode(200).build();
@@ -382,7 +389,7 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -408,7 +415,7 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -434,10 +441,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -460,7 +467,7 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -486,10 +493,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -512,10 +519,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -538,10 +545,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -564,10 +571,10 @@ describe("VoicesClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
