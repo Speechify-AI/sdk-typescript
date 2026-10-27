@@ -8,6 +8,7 @@ import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
 import * as Speechify from "../../../index.js";
+import { WatermarkClient } from "../resources/watermark/client/Client.js";
 
 export declare namespace AudioClient {
     export type Options = BaseClientOptions;
@@ -22,9 +23,14 @@ export declare namespace AudioClient {
  */
 export class AudioClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<AudioClient.Options>;
+    protected _watermark: WatermarkClient | undefined;
 
     constructor(options: AudioClient.Options = {}) {
         this._options = normalizeClientOptionsWithAuth(options);
+    }
+
+    public get watermark(): WatermarkClient {
+        return (this._watermark ??= new WatermarkClient(this._options));
     }
 
     /**
@@ -42,6 +48,7 @@ export class AudioClient {
      * @throws {@link Speechify.PaymentRequiredError}
      * @throws {@link Speechify.ForbiddenError}
      * @throws {@link Speechify.NotFoundError}
+     * @throws {@link Speechify.ConflictError}
      * @throws {@link Speechify.TooManyRequestsError}
      * @throws {@link Speechify.InternalServerError}
      * @throws {@link Speechify.BadGatewayError}
@@ -71,15 +78,15 @@ export class AudioClient {
             _authRequest.headers,
             this._options?.headers,
             mergeOnlyDefinedHeaders({
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
             }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 "v1/audio/speech",
             ),
             method: "POST",
@@ -113,11 +120,8 @@ export class AudioClient {
                     throw new Speechify.ForbiddenError(_response.error.body as Speechify.Error_, _response.rawResponse);
                 case 404:
                     throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 413:
-                    throw new Speechify.ContentTooLargeError(
-                        _response.error.body as Speechify.Error_,
-                        _response.rawResponse,
-                    );
+                case 409:
+                    throw new Speechify.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Speechify.TooManyRequestsError(
                         _response.error.body as Speechify.Error_,
@@ -164,6 +168,7 @@ export class AudioClient {
      * @throws {@link Speechify.PaymentRequiredError}
      * @throws {@link Speechify.ForbiddenError}
      * @throws {@link Speechify.NotFoundError}
+     * @throws {@link Speechify.ConflictError}
      * @throws {@link Speechify.TooManyRequestsError}
      * @throws {@link Speechify.InternalServerError}
      * @throws {@link Speechify.BadGatewayError}
@@ -187,15 +192,15 @@ export class AudioClient {
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 Accept: accept,
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
             }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher<core.BinaryResponse>({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 "v1/audio/stream",
             ),
             method: "POST",
@@ -230,11 +235,8 @@ export class AudioClient {
                     throw new Speechify.ForbiddenError(_response.error.body as Speechify.Error_, _response.rawResponse);
                 case 404:
                     throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 413:
-                    throw new Speechify.ContentTooLargeError(
-                        _response.error.body as Speechify.Error_,
-                        _response.rawResponse,
-                    );
+                case 409:
+                    throw new Speechify.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Speechify.TooManyRequestsError(
                         _response.error.body as Speechify.Error_,
@@ -287,12 +289,16 @@ export class AudioClient {
      * `output_format`: changing the codec or sample rate does not change the
      * duration.
      *
-     * Speech marks are produced by the streaming-native models. The default
-     * `simba-3.0` and `simba-3.2` both serve this route; the legacy
-     * `simba-english` and `simba-multilingual` models return 400
-     * `speech_marks_unsupported` here.
+     * Every model this route accepts produces speech marks here. The default
+     * `simba-3.0`, `simba-3.2` and `simba-3.5` stream marks word by word
+     * alongside the audio. The legacy `simba-english` and `simba-multilingual` models,
+     * still selectable on a workspace pinned before API version `2026-09-21`,
+     * synthesize a sentence at a time, so their marks arrive a sentence at a
+     * time with that sentence's audio; from that version on they return 400
+     * `model_retired` on every synthesis route, and from 2026-11-21 both ids
+     * are served by our current models.
      * For Base64-encoded audio and speech marks in one non-streamed JSON
-     * response, on any model, use POST /v1/audio/speech.
+     * response, use POST /v1/audio/speech.
      */
     public streamWithTimestamps(
         request: Speechify.StreamWithTimestampsAudioRequest,
@@ -312,15 +318,15 @@ export class AudioClient {
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 Accept: accept,
-                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-13",
+                "Speechify-Version": requestOptions?.version ?? this._options?.version ?? "2026-09-30",
             }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher<ReadableStream>({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SpeechifyEnvironment.Default,
+                    ((await core.Supplier.get(this._options.environment)) ?? environments.SpeechifyEnvironment.Default)
+                        .base,
                 "v1/audio/stream/with-timestamps",
             ),
             method: "POST",
@@ -366,11 +372,8 @@ export class AudioClient {
                     throw new Speechify.ForbiddenError(_response.error.body as Speechify.Error_, _response.rawResponse);
                 case 404:
                     throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 413:
-                    throw new Speechify.ContentTooLargeError(
-                        _response.error.body as Speechify.Error_,
-                        _response.rawResponse,
-                    );
+                case 409:
+                    throw new Speechify.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Speechify.TooManyRequestsError(
                         _response.error.body as Speechify.Error_,
