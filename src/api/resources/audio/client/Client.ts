@@ -49,6 +49,7 @@ export class AudioClient {
      * @throws {@link Speechify.ForbiddenError}
      * @throws {@link Speechify.NotFoundError}
      * @throws {@link Speechify.ConflictError}
+     * @throws {@link Speechify.ContentTooLargeError}
      * @throws {@link Speechify.TooManyRequestsError}
      * @throws {@link Speechify.InternalServerError}
      * @throws {@link Speechify.BadGatewayError}
@@ -122,6 +123,11 @@ export class AudioClient {
                     throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
                     throw new Speechify.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new Speechify.ContentTooLargeError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new Speechify.TooManyRequestsError(
                         _response.error.body as Speechify.Error_,
@@ -169,6 +175,7 @@ export class AudioClient {
      * @throws {@link Speechify.ForbiddenError}
      * @throws {@link Speechify.NotFoundError}
      * @throws {@link Speechify.ConflictError}
+     * @throws {@link Speechify.ContentTooLargeError}
      * @throws {@link Speechify.TooManyRequestsError}
      * @throws {@link Speechify.InternalServerError}
      * @throws {@link Speechify.BadGatewayError}
@@ -237,6 +244,11 @@ export class AudioClient {
                     throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
                     throw new Speechify.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new Speechify.ContentTooLargeError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new Speechify.TooManyRequestsError(
                         _response.error.body as Speechify.Error_,
@@ -374,6 +386,11 @@ export class AudioClient {
                     throw new Speechify.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
                     throw new Speechify.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 413:
+                    throw new Speechify.ContentTooLargeError(
+                        _response.error.body as Speechify.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new Speechify.TooManyRequestsError(
                         _response.error.body as Speechify.Error_,
