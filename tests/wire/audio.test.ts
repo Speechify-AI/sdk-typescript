@@ -11,7 +11,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {
             audio_format: "mp3",
@@ -59,7 +59,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -87,7 +87,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -115,10 +115,10 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -143,10 +143,10 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -171,7 +171,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -199,10 +199,38 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/speech")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.audio.speech({
+                input: "input",
+                voice_id: "voice_id",
+            });
+        }).rejects.toThrow(Speechify.ConflictError);
+    });
+
+    test("speech (8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: { base: server.baseUrl, production: server.baseUrl },
+        });
+        const rawRequestBody = { input: "input", voice_id: "voice_id" };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -221,16 +249,16 @@ describe("AudioClient", () => {
         }).rejects.toThrow(Speechify.TooManyRequestsError);
     });
 
-    test("speech (8)", async () => {
+    test("speech (9)", async () => {
         const server = mockServerPool.createServer();
         const client = new SpeechifyClient({
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -249,16 +277,16 @@ describe("AudioClient", () => {
         }).rejects.toThrow(Speechify.InternalServerError);
     });
 
-    test("speech (9)", async () => {
+    test("speech (10)", async () => {
         const server = mockServerPool.createServer();
         const client = new SpeechifyClient({
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -277,16 +305,16 @@ describe("AudioClient", () => {
         }).rejects.toThrow(Speechify.BadGatewayError);
     });
 
-    test("speech (10)", async () => {
+    test("speech (11)", async () => {
         const server = mockServerPool.createServer();
         const client = new SpeechifyClient({
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -311,7 +339,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = {
             input: "Streaming long-form audio with the Speechify API.",
@@ -365,7 +393,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -395,7 +423,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -425,10 +453,10 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -455,10 +483,10 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -485,7 +513,7 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
         const rawResponseBody = { key: "value" };
@@ -515,10 +543,40 @@ describe("AudioClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/audio/stream/with-timestamps")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.audio.streamWithTimestamps({
+                body: {
+                    input: "input",
+                    voice_id: "voice_id",
+                },
+            });
+        }).rejects.toThrow(Speechify.ConflictError);
+    });
+
+    test("streamWithTimestamps (8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SpeechifyClient({
+            maxRetries: 0,
+            token: "test",
+            version: "test",
+            environment: { base: server.baseUrl, production: server.baseUrl },
+        });
+        const rawRequestBody = { input: "input", voice_id: "voice_id" };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -539,16 +597,16 @@ describe("AudioClient", () => {
         }).rejects.toThrow(Speechify.TooManyRequestsError);
     });
 
-    test("streamWithTimestamps (8)", async () => {
+    test("streamWithTimestamps (9)", async () => {
         const server = mockServerPool.createServer();
         const client = new SpeechifyClient({
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -569,16 +627,16 @@ describe("AudioClient", () => {
         }).rejects.toThrow(Speechify.InternalServerError);
     });
 
-    test("streamWithTimestamps (9)", async () => {
+    test("streamWithTimestamps (10)", async () => {
         const server = mockServerPool.createServer();
         const client = new SpeechifyClient({
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()
@@ -599,16 +657,16 @@ describe("AudioClient", () => {
         }).rejects.toThrow(Speechify.BadGatewayError);
     });
 
-    test("streamWithTimestamps (10)", async () => {
+    test("streamWithTimestamps (11)", async () => {
         const server = mockServerPool.createServer();
         const client = new SpeechifyClient({
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: server.baseUrl,
+            environment: { base: server.baseUrl, production: server.baseUrl },
         });
         const rawRequestBody = { input: "input", voice_id: "voice_id" };
-        const rawResponseBody = { error: { code: "bad_request", message: "message" } };
+        const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
 
         server
             .mockEndpoint()

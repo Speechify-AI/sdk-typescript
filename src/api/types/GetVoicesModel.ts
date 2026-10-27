@@ -4,15 +4,30 @@ import type * as Speechify from "../index.js";
 
 export interface GetVoicesModel {
     languages: Speechify.GetVoiceLanguage[];
+    /**
+     * A model this voice can be synthesized with. The set is filtered to
+     * what YOUR workspace's API version can select, so a voice never
+     * advertises a model your own synthesis request would reject. The
+     * legacy `simba-english` / `simba-multilingual` values appear only for
+     * a workspace pinned before API version `2026-09-21`.
+     */
     name: GetVoicesModel.Name;
 }
 
 export namespace GetVoicesModel {
+    /**
+     * A model this voice can be synthesized with. The set is filtered to
+     * what YOUR workspace's API version can select, so a voice never
+     * advertises a model your own synthesis request would reject. The
+     * legacy `simba-english` / `simba-multilingual` values appear only for
+     * a workspace pinned before API version `2026-09-21`.
+     */
     export const Name = {
         SimbaEnglish: "simba-english",
         SimbaMultilingual: "simba-multilingual",
         Simba30: "simba-3.0",
         Simba32: "simba-3.2",
+        Simba35: "simba-3.5",
     } as const;
     export type Name = (typeof Name)[keyof typeof Name];
 }
