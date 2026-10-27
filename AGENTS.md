@@ -2,7 +2,10 @@
 
 This is a **Fern-generated** SDK. It is published to **npm** as `@speechify/api`.
 The source of truth for the API surface lives in the `SpeechifyInc/speechify-api`
-repo (`fern/`); this repo receives generated code on the `sdk-release` branch.
+repo (`fern/`). Each regeneration arrives as a Fern pull request against `main`
+(`mode: pull-request` in that repo's `fern/generators.yml`); before that switch,
+Fern pushed to an `sdk-release` branch that went unmerged from August to October
+2026. See "Regeneration PRs" below.
 
 **Read this before doing anything that touches a release.** A botched release here
 publishes to a public registry and breaks the contract with every customer who
@@ -155,6 +158,37 @@ because it is built from the stamped and asserted tree.
   `release-please-config.json`, `.release-please-manifest.json`, `CHANGELOG.md`,
   `context7.json` — all listed. A regen deletes anything not listed; that is how
   `AGENTS.md` and `manual-publish.yml` went missing once already.
+- `README.md`, `reference.md`, `src/core/stream/Stream.ts`,
+  `tests/unit/stream/Stream.test.ts`, `tests/custom.test.ts`, `LICENSE`: listed
+  because they carry hand edits. A regen never updates them, so every
+  regeneration PR has to re-sync the two Markdown files by hand (see below).
+- `src/api/resources/**/client/Client.ts`: **never listed.** The 4.x audio client
+  was shielded for one line (`eventDiscriminator`), froze in August, and broke
+  the 5.0.0 build when the environment became an object. That line now comes
+  from the spec (`x-fern-discriminator-context: protocol`); fix a client in the
+  spec, not here.
+
+## Regeneration PRs
+
+- **The squash title decides the release.** Fern titles its PR "SDK
+  regeneration", which release-please ignores. Retitle it `feat:` for additive
+  changes, or `feat!:` with a `BREAKING CHANGE:` section for a break: a member
+  removed from a closed union, an option's type narrowed, or the default
+  `Speechify-Version` moving (an unpinned caller's wire behaviour changes).
+- **Re-sync the shielded docs.** Bring `README.md` and `reference.md` up to the
+  recommended model, the default version and any new resource. To see exactly
+  what Fern would emit for them, generate locally from a scratch copy of
+  speechify-api's `fern/`: point the typescript generator's `output` at
+  `{location: local-file-system, path: <dir>}`, add `snippets: {path: <file>}`
+  (that switch turns README and reference generation on), and run
+  `fern generate --local --group typescript --keepDocker`. `src/` lands in
+  `<dir>`; `README.md` and `reference.md` stay in the kept container under
+  `/tmp/tmp-*/` (`docker cp` them out, then `docker rm` it). The local README
+  uses placeholder import paths because local output has no npm publish info;
+  `reference.md` is exact.
+- **CI runs on the PR**, so a regeneration that breaks the build or
+  `tests/custom.test.ts` (the default-environment smoke test) shows red before
+  anyone merges it.
 
 ## Operational checklist
 
