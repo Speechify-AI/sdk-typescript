@@ -2,13 +2,13 @@
 
 export interface SpeechifyEnvironmentUrls {
     base: string;
-    production: string;
+    websocket: string;
 }
 
 export const SpeechifyEnvironment = {
     Default: {
         base: "https://api.speechify.ai",
-        production: "wss://api.speechify.ai",
+        websocket: "wss://api.speechify.ai",
     },
 } as const;
 

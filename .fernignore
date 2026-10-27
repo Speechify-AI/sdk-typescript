@@ -35,14 +35,12 @@ AGENTS.md
 context7.json
 
 # NOTE: src/api/resources/audio/client/Client.ts is deliberately NOT listed.
-# It was shielded only to pass `eventDiscriminator: "type"` to core.Stream for
-# POST /v1/audio/stream/with-timestamps (the SSE parser that handles multi-line
-# `data:`, CRLF and a final event with no trailing blank line), and the frozen
-# copy went stale until it broke the build. The spec now declares
-# `x-fern-discriminator-context: protocol` on SpeechStreamEvent's discriminator
-# in SpeechifyInc/speechify-api, so the generator emits that line itself. If a
-# regeneration PR removes it, the spec annotation was lost: fix it there, never
-# shield a resource client again.
+# It was shielded to pass `eventDiscriminator: "type"` to core.Stream, and the
+# frozen copy went stale until it broke the build. The generated client parses
+# each `data:` line, which is correct because the API writes every event as one
+# named event with a single-line JSON payload that carries `type`
+# (tests/custom.test.ts checks it). Fix a resource client in the spec in
+# SpeechifyInc/speechify-api, never by shielding it.
 
 # Fixes abort handling in core.Stream. The generated version assigns a private
 # AbortController that nothing ever reads, and registers an abort listener that

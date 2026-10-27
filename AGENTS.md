@@ -164,9 +164,11 @@ because it is built from the stamped and asserted tree.
   regeneration PR has to re-sync the two Markdown files by hand (see below).
 - `src/api/resources/**/client/Client.ts`: **never listed.** The 4.x audio client
   was shielded for one line (`eventDiscriminator`), froze in August, and broke
-  the 5.0.0 build when the environment became an object. That line now comes
-  from the spec (`x-fern-discriminator-context: protocol`); fix a client in the
-  spec, not here.
+  the 5.0.0 build when the environment became an object. The generated client
+  parses each `data:` line, which suits how the API frames events; fix a client
+  in the spec, not here. Do not add `x-fern-discriminator-context: protocol` to
+  `SpeechStreamEvent` to get that line back: the Python generator then yields
+  classes that do not match its declared union.
 
 ## Regeneration PRs
 
