@@ -7,7 +7,7 @@ import type * as Speechify from "../../../../index.js";
  *     {
  *         audio_format: "mp3",
  *         input: "Hello! This is the Speechify text-to-speech API.",
- *         model: "simba-3.2",
+ *         model: "simba-3.5",
  *         voice_id: "geffen_32"
  *     }
  */
@@ -27,7 +27,7 @@ export interface GetSpeechRequest {
      */
     language?: string;
     /**
-     * Model used for audio synthesis. Defaults to `simba-3.0`, which is streaming-native and multilingual: it officially supports English plus `de-DE`, `es-ES`, `es-MX`, `fr-FR`, `it-IT` and `pt-BR`, and routes each request to its English or its multilingual training based on `language` (falling back to the voice's locale when `language` is omitted). `simba-3.2` is the streaming-native model with the lowest TTFB and richest expressivity; it is English only, so a non-English voice returns 400. `simba-3.5` is the recommended model: streaming-native, covering 48 languages under one id, English included, routed by `language` like `simba-3.0`; every voice works on it, cloned voices included.
+     * Model used for audio synthesis. Defaults to `simba-3.0`, which is streaming-native and multilingual: it officially supports English plus `de-DE`, `es-ES`, `es-MX`, `fr-FR`, `it-IT` and `pt-BR`, and routes each request to its English or its multilingual training based on `language` (falling back to the voice's locale when `language` is omitted). `simba-3.2` is the streaming-native English model; a non-English voice returns 400. `simba-3.5` is the recommended model: streaming-native, covering 48 languages under one id, English included, routed by `language` like `simba-3.0`; every voice works on it, cloned voices included.
      *
      * The legacy Simba 1.6 models `simba-english` and `simba-multilingual` are retired from API version `2026-09-21`: naming one returns 400 `model_retired`. Pinning your API version to a date before `2026-09-21` keeps them on their Simba 1.6 training until **2026-11-21**; from then both ids are served by our current models on every API version that can still name them. Migrate to `simba-3.2` (English), `simba-3.0` or `simba-3.5` before then; call GET /v1/audio/models to see the set your workspace can select today.
      */
@@ -53,7 +53,7 @@ export namespace GetSpeechRequest {
     } as const;
     export type AudioFormat = (typeof AudioFormat)[keyof typeof AudioFormat];
     /**
-     * Model used for audio synthesis. Defaults to `simba-3.0`, which is streaming-native and multilingual: it officially supports English plus `de-DE`, `es-ES`, `es-MX`, `fr-FR`, `it-IT` and `pt-BR`, and routes each request to its English or its multilingual training based on `language` (falling back to the voice's locale when `language` is omitted). `simba-3.2` is the streaming-native model with the lowest TTFB and richest expressivity; it is English only, so a non-English voice returns 400. `simba-3.5` is the recommended model: streaming-native, covering 48 languages under one id, English included, routed by `language` like `simba-3.0`; every voice works on it, cloned voices included.
+     * Model used for audio synthesis. Defaults to `simba-3.0`, which is streaming-native and multilingual: it officially supports English plus `de-DE`, `es-ES`, `es-MX`, `fr-FR`, `it-IT` and `pt-BR`, and routes each request to its English or its multilingual training based on `language` (falling back to the voice's locale when `language` is omitted). `simba-3.2` is the streaming-native English model; a non-English voice returns 400. `simba-3.5` is the recommended model: streaming-native, covering 48 languages under one id, English included, routed by `language` like `simba-3.0`; every voice works on it, cloned voices included.
      *
      * The legacy Simba 1.6 models `simba-english` and `simba-multilingual` are retired from API version `2026-09-21`: naming one returns 400 `model_retired`. Pinning your API version to a date before `2026-09-21` keeps them on their Simba 1.6 training until **2026-11-21**; from then both ids are served by our current models on every API version that can still name them. Migrate to `simba-3.2` (English), `simba-3.0` or `simba-3.5` before then; call GET /v1/audio/models to see the set your workspace can select today.
      */
@@ -62,7 +62,7 @@ export namespace GetSpeechRequest {
          * simba-3.0 is the streaming-native multilingual model, and the default when `model` is omitted. Officially supports English plus de-DE, es-ES, es-MX, fr-FR, it-IT and pt-BR; the request language (or the voice's locale when it is omitted) selects the English or the multilingual training. Prefer simba-3.5 for new integrations. Cloned/personal voices work self-serve on simba-3.0. */
         Simba30: "simba-3.0",
         /**
-         * simba-3.2 is the streaming-native model with the lowest TTFB and richest expressivity. English only; a non-English voice returns 400 - use simba-3.0 for the other supported languages. Every English voice in the catalog is supported, cloned voices included. */
+         * simba-3.2 is the streaming-native English model. A non-English voice returns 400 - use simba-3.5 for any other language. Every English voice in the catalog is supported, cloned voices included. */
         Simba32: "simba-3.2",
         /**
          * simba-3.5 is the recommended streaming-native model, covering 48 languages under one id, English included; the request language (or the voice's locale when it is omitted) selects the English or the multilingual training. Every voice in the catalog is supported, cloned voices included. */

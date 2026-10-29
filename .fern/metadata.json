@@ -5,11 +5,12 @@
     "generatorConfig": {
         "inlineFileProperties": true,
         "skipResponseValidation": true,
-        "namespaceExport": "Speechify"
+        "namespaceExport": "Speechify",
+        "noSerdeLayer": true
     },
-    "originGitCommit": "840e0cbeef9d9aa315ae4d3c9a871c350f1a305a",
+    "originGitCommit": "9dc6c3ff12a6ae2c28a77e56accb770d4c8e95cf",
     "originGitCommitIsDirty": false,
     "invokedBy": "ci",
     "ciProvider": "github",
-    "sdkVersion": "5.0.0"
+    "sdkVersion": "5.0.1"
 }

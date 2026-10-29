@@ -59,7 +59,7 @@ export class AudioClient {
      *     await client.audio.speech({
      *         audio_format: "mp3",
      *         input: "Hello! This is the Speechify text-to-speech API.",
-     *         model: "simba-3.2",
+     *         model: "simba-3.5",
      *         voice_id: "geffen_32"
      *     })
      */
