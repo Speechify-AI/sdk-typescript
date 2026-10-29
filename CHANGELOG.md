@@ -1,5 +1,29 @@
 # Changelog
 
+## [5.0.0](https://github.com/Speechify-AI/sdk-typescript/compare/4.0.1...5.0.0) (2026-10-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* the default API version moves to 2026-09-30, the model unions narrow, and `environment` takes an object.
+    - Requests now send `Speechify-Version: 2026-09-30` instead of
+    2026-09-13. On that version `simba-english` and `simba-multilingual`
+    return 400 `model_retired`, and `output_format: pcm_16000` returns real
+    16 kHz audio instead of 24 kHz bytes labelled 16 kHz.
+    - To keep the 4.x wire behaviour, pin the version: `new
+    SpeechifyClient({ version: "2026-09-13" })`
+    - `GetSpeechRequest.Model` and `GetStreamRequest.Model` drop
+    `simba-english` and `simba-multilingual` and add `simba-3.5`, so code
+    that names a Simba 1.6 id stops compiling.
+    - `environment` no longer accepts a URL string.
+    `SpeechifyEnvironment.Default` is now `{ base:
+    "https://api.speechify.ai", websocket: "wss://api.speechify.ai" }`. For
+    a custom REST URL, pass `baseUrl: "https://..."`.
+
+### Features
+
+* regenerate SDK for API 2026-09-30 with simba-3.5 ([#27](https://github.com/Speechify-AI/sdk-typescript/issues/27)) ([dac5216](https://github.com/Speechify-AI/sdk-typescript/commit/dac5216b4f5f3f3da47b8fd7a319355a51d1e271))
+
 ## [4.0.1](https://github.com/Speechify-AI/sdk-typescript/compare/4.0.0...4.0.1) (2026-08-19)
 
 
