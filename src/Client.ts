@@ -2,10 +2,14 @@
 
 import { AudioClient } from "./api/resources/audio/client/Client.js";
 import { ModelsClient } from "./api/resources/models/client/Client.js";
+import { ProjectsClient } from "./api/resources/projects/client/Client.js";
 import { VoicesClient } from "./api/resources/voices/client/Client.js";
+import { WebhooksClient } from "./api/resources/webhooks/client/Client.js";
+import { WorkspacesClient } from "./api/resources/workspaces/client/Client.js";
 import type { BaseClientOptions, BaseRequestOptions } from "./BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "./BaseClient.js";
 import * as core from "./core/index.js";
+import * as environments from "./environments.js";
 
 export declare namespace SpeechifyClient {
     export type Options = BaseClientOptions;
@@ -18,6 +22,9 @@ export class SpeechifyClient {
     protected _audio: AudioClient | undefined;
     protected _models: ModelsClient | undefined;
     protected _voices: VoicesClient | undefined;
+    protected _projects: ProjectsClient | undefined;
+    protected _workspaces: WorkspacesClient | undefined;
+    protected _webhooks: WebhooksClient | undefined;
 
     constructor(options: SpeechifyClient.Options = {}) {
         this._options = normalizeClientOptionsWithAuth(options);
@@ -33,6 +40,18 @@ export class SpeechifyClient {
 
     public get voices(): VoicesClient {
         return (this._voices ??= new VoicesClient(this._options));
+    }
+
+    public get projects(): ProjectsClient {
+        return (this._projects ??= new ProjectsClient(this._options));
+    }
+
+    public get workspaces(): WorkspacesClient {
+        return (this._workspaces ??= new WorkspacesClient(this._options));
+    }
+
+    public get webhooks(): WebhooksClient {
+        return (this._webhooks ??= new WebhooksClient(this._options));
     }
 
     /**
@@ -54,7 +73,14 @@ export class SpeechifyClient {
             input,
             init,
             {
-                baseUrl: this._options.baseUrl ?? this._options.environment,
+                baseUrl:
+                    this._options.baseUrl ??
+                    (async () => {
+                        const env = await core.Supplier.get(this._options.environment);
+                        return typeof env === "string"
+                            ? env
+                            : ((env as Record<string, string>)?.base ?? environments.SpeechifyEnvironment.Default.base);
+                    }),
                 headers: this._options.headers,
                 timeoutInSeconds: this._options.timeoutInSeconds,
                 maxRetries: this._options.maxRetries,
