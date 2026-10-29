@@ -11,7 +11,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: { base: server.baseUrl, production: server.baseUrl },
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = {
@@ -41,7 +41,7 @@ describe("ModelsClient", () => {
                     retired_at: "2026-09-21",
                     sunset_at: "2026-11-21",
                     description:
-                        "Streaming-native model with the lowest time-to-first-byte and richest expressivity, English only today. Serves every English voice in the catalog, your workspace's own cloned voices included. Use `simba-3.0` for any other language.",
+                        "Streaming-native English model. Serves every English voice in the catalog, your workspace's own cloned voices included. Use `simba-3.5` for any other language.",
                     languages: ["en"],
                     endpoints: ["/v1/audio/speech", "/v1/audio/stream", "/v1/audio/stream/with-timestamps"],
                     curated_voices: false,
@@ -194,7 +194,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: { base: server.baseUrl, production: server.baseUrl },
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -212,7 +212,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: { base: server.baseUrl, production: server.baseUrl },
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { key: "value" };
@@ -230,7 +230,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: { base: server.baseUrl, production: server.baseUrl },
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -248,7 +248,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: { base: server.baseUrl, production: server.baseUrl },
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
@@ -266,7 +266,7 @@ describe("ModelsClient", () => {
             maxRetries: 0,
             token: "test",
             version: "test",
-            environment: { base: server.baseUrl, production: server.baseUrl },
+            environment: { base: server.baseUrl, websocket: server.baseUrl },
         });
 
         const rawResponseBody = { error: { code: "endpoint_moved", message: "message" } };
